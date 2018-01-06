@@ -1,0 +1,71 @@
+body {
+    display: flex;
+    flex-direction: column;
+    background-size: cover;
+    background-image: url("../assets/images/pattern.jpg");
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.input-field input[type=date]:focus+label,
+.input-field input[type=text]:focus+label,
+.input-field input[type=email]:focus+label,
+.input-field input[type=password]:focus+label {
+    color: #91c74c;
+}
+
+.input-field input[type=date]:focus,
+.input-field input[type=text]:focus,
+.input-field input[type=email]:focus,
+.input-field input[type=password]:focus {
+    border-bottom: 2px solid #91c74c;
+    box-shadow: none;
+}
+
+.material-icons:focus {
+    background-color: #91c74c;
+}
+
+#greyBox {
+    display: inline-block;
+    padding: 32px 48px 0px 48px;
+    border: 1px solid #EEE;
+}
+
+.jumbotron {
+    background: url("../assets/images/logo.png") no-repeat center center;
+    background-size: 40% 100%;
+    background-color: inherit;
+    height: 20vh;
+}
+
+.card-image {
+    background: url("../assets/images/friends.JPG") no-repeat center center;
+    background-size: cover;
+    background-color: inherit;
+}
+
+#h2h {
+    background: url("../assets/images/boxer.jpg") no-repeat center center;
+    background-size: cover;
+    background-color: inherit;
+}
+
+#chat {
+    position: relative;
+    float: right;
+    display: flex;
+    margin-right: -25px;
+}
+
+#LogInFooter {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 19vh;
+}

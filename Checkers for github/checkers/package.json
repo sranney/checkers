@@ -1,0 +1,25 @@
+{
+  "name": "checkers",
+  "version": "0.1.0",
+  "private": true,
+  "proxy":"http://localhost:5000",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "firebase": "^4.8.1",
+    "jquery": "^3.2.1",
+    "materialize-css": "^0.100.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-materialize": "^1.1.1",
+    "react-modal": "^3.1.8",
+    "react-router": "^4.2.0",
+    "react-scripts": "1.0.17",
+    "socket.io-client": "^2.0.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
