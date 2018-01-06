@@ -26,16 +26,6 @@ main {
     box-shadow: none;
 }
 
-.material-icons:focus {
-    background-color: #91c74c;
-}
-
-#greyBox {
-    display: inline-block;
-    padding: 32px 48px 0px 48px;
-    border: 1px solid #EEE;
-}
-
 .jumbotron {
     background: url("../assets/images/logo.png") no-repeat center center;
     background-size: 40% 100%;
@@ -71,12 +61,20 @@ main {
 }
 
 .btn-large {
-    text-transform: capitalize;
-    width: 40%;
+    width: 35%;
     margin: 8px;
     font-size: 16px;
 }
 
+.btn {
+    text-transform: capitalize;
+}
+
 .fa-2x {
     margin-right: 10px;
+}
+
+#logOutBtn {
+    float: right;
+    margin: 12px;
 }

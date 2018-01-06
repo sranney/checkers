@@ -47,7 +47,8 @@ class Home extends React.Component {
         
 this.props.user?
 
-<main>
+<main>  
+    <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>       
     <div className="container">
         <div className="jumbotron text-center"></div>
     <Card className='small'
@@ -55,7 +56,7 @@ this.props.user?
         <span class="orange-text text-lighten-1"><h2>Head to Head</h2></span></CardTitle>}
 
 	    actions={[<SideNav
-                    trigger={<Button className = "btn light-green waves-effect waves-light">Choose your opponent</Button>}
+                    trigger={<Button className = "btn light-green waves-effect waves-light z-depth-2">Choose your opponent</Button>}
                     options={{ closeOnClick: true }}>
                     <SideNavItem userView
 		                user={{
@@ -107,7 +108,8 @@ this.props.user?
                 <input type="text" ref={(input)=>this.toEmailAddress=input} placeholder="enter friend's email here" name="friendEmail"/>
                 Enter an invite message here
                 <textarea ref={(input)=>this.msgBody=input}>{`${name} has invited you to play checkers with him at checkers.com.`}</textarea>
-                <button type="submit">Send Invite!</button>
+                
+                <Button type="submit" className = "btn orange lighten-1 waves-effect waves-light z-depth-2">Send Invite!</Button>
             </form>
             }
     >
@@ -125,7 +127,6 @@ this.props.user?
                     <li><a key={4} className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank">Spencer Ranney</a></li>
                 </ul>
                 }>
-                <Button type="submit" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
                 <h5 className="white-text">Final Project: Check your Checkers</h5>
                 <p className="grey-text text-lighten-4">2017 Fall Cohort of the SMU Coding Bootcamp</p>
     </Footer>   
