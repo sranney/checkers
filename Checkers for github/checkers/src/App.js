@@ -6,7 +6,7 @@ import { Router, Route, Switch, Redirect } from 'react-router';
 //components
 import LogIn from "./components/LogIn";
 import Home from "./components/Home";
-import GamePage from "./components/GamePage";
+import GamePlayPage from "./components/GamePage";
 
 //firebase for authentication
 import {auth} from "./firebase";
@@ -104,7 +104,7 @@ class App extends Component {
             />
           )}
         />
-        <Route exact path= "/gamepage/:id" component={GamePage} />
+        <Route exact path= "/gamepage/:id" component={GamePlayPage} />
         <Route component = {NotFound} />
       </Switch>
     </div>

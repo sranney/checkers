@@ -1,0 +1,77 @@
+.board {
+    
+    float: left;
+    
+    
+    height:386px;
+    width:386px;
+    
+    border-style:solid;
+    border-width:9px;
+    border-color:#DEB887;
+}
+
+div.square {
+    
+    float:left;
+    
+    position:relative;
+    
+    width:46px;
+    height:46px;
+    border-width:2px;
+    
+    
+    border-right-style:solid;
+    border-bottom-style:solid;
+    
+    border-color:#444;
+}
+
+/* the bottom row */
+div.square:nth-last-child(-n + 8) {
+    border-bottom-style:none;
+}
+
+/* the sides */
+div.square:nth-child(8n) {
+    border-right-style:none;
+}
+
+div.square.light {
+    background-color:#ccc;
+}
+
+div.square.dark {
+    background-color:#333;
+}
+
+div.piece {
+    float: left;
+    position: absolute;
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    z-index: 10;
+    margin: 7px;
+}
+
+div.piece.playerOne {
+    background-color: red;
+}
+
+div.piece.playerTwo {
+    background-color: green;
+}
+
+div.piece.playerOne.king {
+    border: 6px solid purple;
+    width: 32px;
+    height: 32px;
+}
+
+div.piece.playerTwo.king {
+    border: 6px solid purple;
+    width: 32px;
+    height: 32px;
+}
