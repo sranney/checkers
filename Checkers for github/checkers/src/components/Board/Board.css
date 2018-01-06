@@ -54,6 +54,7 @@ div.piece {
     border-radius: 50%;
     z-index: 10;
     margin: 7px;
+    margin-top: 25px;
 }
 
 div.piece.playerOne {
@@ -74,4 +75,8 @@ div.piece.playerTwo.king {
     border: 6px solid purple;
     width: 32px;
     height: 32px;
+}
+
+h1{
+    color: white;
 }
