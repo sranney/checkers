@@ -439,9 +439,13 @@ class Board extends Component {
 				&& piece.position.top === openSquareToJump.position.top);					
 						
 			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
+			if(openSquareToJump.position.top > 331){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top < 331 && openSquareToJump.position.left > 7){
+				this.areThereJumpsLeftForKING(pieceToCheck);
 				pieceToCheck.position = openSquareToJump.position;
 				fullAdjoiningSquareCheckDownLeft[0].class = "newClass";
 				fullAdjoiningSquareCheckDownLeft[0].position = {top: 1000, left: 1000};					
@@ -450,7 +454,7 @@ class Board extends Component {
 		}			
 
 		//if there is a piece down and to the right the openSquareToJump should be the square 'behind' that piece
-		else if(fullAdjoiningSquareCheckDownRight.length === 1){
+		if(fullAdjoiningSquareCheckDownRight.length === 1){
 			let openSquareToJump = {
 				position: {
 					left: pieceToCheck.position.left + 92,
@@ -468,9 +472,14 @@ class Board extends Component {
 				&& piece.position.top === openSquareToJump.position.top);					
 						
 			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
+			if(openSquareToJump.position.top > 331){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}
+
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top < 331 && openSquareToJump.position.left < 331){
+				this.areThereJumpsLeftForKING(pieceToCheck);
 				fullAdjoiningSquareCheckDownRight[0].class = "newClass";
 				fullAdjoiningSquareCheckDownRight[0].position = {top: 1000, left: 1000};
 				pieceToCheck.position = openSquareToJump.position;
@@ -479,7 +488,7 @@ class Board extends Component {
 		}			
 
 		//if there is a piece up and to the left the openSquareToJump should be the square 'behind' that piece
-		else if(fullAdjoiningSquareCheckUpLeft.length === 1){
+		if(fullAdjoiningSquareCheckUpLeft.length === 1){
 			let openSquareToJump = {
 				position: {
 					left: pieceToCheck.position.left - 92,
@@ -497,9 +506,14 @@ class Board extends Component {
 				&& piece.position.top === openSquareToJump.position.top);					
 						
 			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
+			if(openSquareToJump.position.top < 8){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}
+
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top > 7 && openSquareToJump.position.left > 7){
+				this.areThereJumpsLeftForKING(pieceToCheck);
 				pieceToCheck.position = openSquareToJump.position;
 				fullAdjoiningSquareCheckUpLeft[0].class = "newClass";
 				fullAdjoiningSquareCheckUpLeft[0].position = {top: 1000, left: 1000};					
@@ -508,7 +522,7 @@ class Board extends Component {
 			}
 		}			
 
-		else if(fullAdjoiningSquareCheckUpRight.length === 1){
+		if(fullAdjoiningSquareCheckUpRight.length === 1){
 			let openSquareToJump = {
 				position: {
 					left: pieceToCheck.position.left + 92,
@@ -526,9 +540,14 @@ class Board extends Component {
 				&& piece.position.top === openSquareToJump.position.top);					
 						
 			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
+			if(openSquareToJump.position.top < 8){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}
+
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top > 7 && openSquareToJump.position.left < 331){
+				this.areThereJumpsLeftForKING(pieceToCheck);
 				pieceToCheck.position = openSquareToJump.position;
 				fullAdjoiningSquareCheckUpRight[0].class = "newClass";
 				fullAdjoiningSquareCheckUpRight[0].position = {top: 1000, left: 1000};
@@ -605,7 +624,10 @@ class Board extends Component {
 				&& piece.position.top === openSquareToJump.position.top);
 
 			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;			
+			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;	
+			if(openSquareToJump.position.top > 331){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}		
 
 			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
 			if(fullAdjoiningSquareCheckDownLeft.length === 1 && anyPieceInSquare > 0){
@@ -639,6 +661,9 @@ class Board extends Component {
 
 			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
 			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;			
+			if(openSquareToJump.position.top > 331){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}				
 
 			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
 			if(fullAdjoiningSquareCheckDownRight.length === 1 && anyPieceInSquare > 0){
@@ -703,6 +728,9 @@ class Board extends Component {
 
 			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
 			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;			
+			if(openSquareToJump.position.top < 8){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}
 
 			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
 			if(fullAdjoiningSquareCheckUpLeft.length === 1 && anyPieceInSquare > 0){
@@ -736,6 +764,9 @@ class Board extends Component {
 
 			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
 			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;			
+			if(openSquareToJump.position.top < 8){
+				anyPieceInSquare = anyPieceInSquare + 1;
+			}
 
 			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
 			if(fullAdjoiningSquareCheckUpRight.length === 1 && anyPieceInSquare > 0){
@@ -1046,7 +1077,17 @@ class Board extends Component {
 
 	
 	render() {
+		const playerTurn = this.playerOneTurn;
+		let message = null;
+
+		if(playerTurn){
+			message = <h1>Player One</h1>
+		}
+		else{
+			message = <h1>Player Two </h1>
+		}
 		return (
+			<div>
 			<div className='board'>
 				{this.state.squares.map(square =>
 					<div 
@@ -1074,6 +1115,10 @@ class Board extends Component {
 						>
 					</div>
 					)}					
+			</div>
+			<div>
+				{message}
+			</div>
 			</div>
 		);
 	}
