@@ -125,7 +125,7 @@ this.props.user?
                     <li><a key={4} className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank">Spencer Ranney</a></li>
                 </ul>
                 }>
-                <button onClick={this.props.logOut}>Logout</button>
+                <Button type="submit" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
                 <h5 className="white-text">Final Project: Check your Checkers</h5>
                 <p className="grey-text text-lighten-4">2017 Fall Cohort of the SMU Coding Bootcamp</p>
     </Footer>   

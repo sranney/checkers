@@ -47,10 +47,12 @@ class LogIn extends React.Component{
   <center>
     <br/>
     <div className="container">
-      <div className="z-depth-1 grey lighten-4 row" id="greyBox">
-        <button onClick={()=>this.authenticate("google")}>Log in With Google</button>
-        <button onClick={()=>this.authenticate("twitter")}>Log in With twitter</button>
-        <button onClick={()=>this.authenticate("facebook")}>Log in With facebook</button>
+      <div>
+        <Button className = "btn-large red waves-effect waves-light z-depth-5" onClick={()=>this.authenticate("google")}><i className="fab fa-google fa-2x" ></i> Log in With Google</Button>
+        <br />
+        <Button className = "btn-large blue lighten-1 waves-effect waves-light z-depth-5" onClick={()=>this.authenticate("twitter")}><i className="fab fa-twitter fa-2x"></i> Log in With twitter</Button>
+        <br />
+        <Button className = "btn-large indigo darken-1 waves-effect waves-light z-depth-5" onClick={()=>this.authenticate("facebook")}><i className="fab fa-facebook-f fa-2x"></i> Log in With facebook</Button>
       </div> 
     </div>
   </center>
