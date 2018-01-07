@@ -65,7 +65,6 @@ class Board extends Component {
 	getSquare = (id) => {
 		//filters the square selected from the current state of squares
 		let thisSquare = this.state.squares.filter(square => square.id === id);
-		console.log(thisSquare);
 		//filter returns an array (of 1) so we select the first item
 		this.squareToMoveTo = thisSquare[0];
 		//from our findMoves functions above a piece must be selected before it can be moved to a square
@@ -445,10 +444,11 @@ class Board extends Component {
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top < 331 && openSquareToJump.position.left > 7){
-				this.areThereJumpsLeftForKING(pieceToCheck);
+				
 				pieceToCheck.position = openSquareToJump.position;
 				fullAdjoiningSquareCheckDownLeft[0].class = "newClass";
-				fullAdjoiningSquareCheckDownLeft[0].position = {top: 1000, left: 1000};					
+				fullAdjoiningSquareCheckDownLeft[0].position = {top: 1000, left: 1000};
+				this.areThereJumpsLeftForKING(pieceToCheck);					
 				this.setState({});
 			}
 		}			
@@ -479,10 +479,11 @@ class Board extends Component {
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top < 331 && openSquareToJump.position.left < 331){
-				this.areThereJumpsLeftForKING(pieceToCheck);
+				
 				fullAdjoiningSquareCheckDownRight[0].class = "newClass";
 				fullAdjoiningSquareCheckDownRight[0].position = {top: 1000, left: 1000};
 				pieceToCheck.position = openSquareToJump.position;
+				this.areThereJumpsLeftForKING(pieceToCheck);
 				this.setState({});
 			}
 		}			
@@ -513,10 +514,11 @@ class Board extends Component {
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top > 7 && openSquareToJump.position.left > 7){
-				this.areThereJumpsLeftForKING(pieceToCheck);
+				
 				pieceToCheck.position = openSquareToJump.position;
 				fullAdjoiningSquareCheckUpLeft[0].class = "newClass";
-				fullAdjoiningSquareCheckUpLeft[0].position = {top: 1000, left: 1000};					
+				fullAdjoiningSquareCheckUpLeft[0].position = {top: 1000, left: 1000};
+				this.areThereJumpsLeftForKING(pieceToCheck);					
 				this.setState({});
 				
 			}
@@ -547,10 +549,11 @@ class Board extends Component {
 			//if there is an open square behind the piece move the selected piece to that square
 			//these parameters make sure there is a square to jump to and that the square is part of the board
 			if(anyPieceInSquare === 0 && openSquareToJump.position.top > 7 && openSquareToJump.position.left < 331){
-				this.areThereJumpsLeftForKING(pieceToCheck);
+				
 				pieceToCheck.position = openSquareToJump.position;
 				fullAdjoiningSquareCheckUpRight[0].class = "newClass";
 				fullAdjoiningSquareCheckUpRight[0].position = {top: 1000, left: 1000};
+				this.areThereJumpsLeftForKING(pieceToCheck);
 				this.setState({});
 				
 			}			
@@ -647,13 +650,6 @@ class Board extends Component {
 			anyPieceOutsideDL = 1;
 		}
 
-	
-		console.log("Player 2 DL", playerTwoDL);
-		console.log("Player 2 DR", playerTwoDR);
-		console.log("Any player Out Left", anyPieceOutsideDL);
-		console.log("Any player Out Right", anyPieceOutsideDR);
-
-	
 
 		if(playerTwoDL + playerTwoDR === 0){
 			this.playerOneTurn = false;
@@ -752,13 +748,6 @@ class Board extends Component {
 			anyPieceOutsideUL = 1;
 		}
 
-	
-		console.log("Player 1 UL", playerOneUL);
-		console.log("Player 1 UR", playerOneUR);
-		console.log("Any player Out Left", anyPieceOutsideUL);
-		console.log("Any player Out Right", anyPieceOutsideUR);
-
-	
 
 		if(playerOneUL + playerOneUR === 0){
 			this.playerOneTurn = true;
@@ -786,8 +775,233 @@ class Board extends Component {
 	}
 
 
-	areThereJumpsLeftForKING = (pieceToCheck) => {
+	areThereJumpsLeftForKING = (piece) => {
+		/*
+			============
+			Following four variables are the squares immediately connected to square the piece is currently in
+			============
+		*/
+		let upLeft = {
+			position: {
+				left: piece.position.left - 46,
+				top: piece.position.top - 46
+			}
+		}
+		let upRight = {
+			position: {
+				left: piece.position.left + 46,
+				top: piece.position.top - 46
+			}
+		}
+		let downLeft = {
+			position: {
+				left: piece.position.left - 46,
+				top: piece.position.top + 46
+			}
+		}
+		let downRight = {
+			position: {
+				left: piece.position.left + 46,
+				top: piece.position.top + 46
+			}
+		}
+		/*
+			============
+			Following four variables are the squares immediately outside those squares connected to the square the piece is currently in
+			============
+		*/
+		let outsideUpLeft = {
+			position: {
+				left: upLeft.position.left - 46,
+				top: upLeft.position.top - 46
+			}
+		}
+		let outsideUpRight = {
+			position: {
+				left: upRight.position.left + 46,
+				top: upRight.position.top - 46
+			}
+		}	
+		let outsideDownRight = {
+			position: {
+				left: downRight.position.left + 46,
+				top: downRight.position.top + 46
+			}
+		}	
+		let outsideDownLeft = {
+			position: {
+				left: downLeft.position.left - 46,
+				top: downLeft.position.top + 46
+			}
+		}		
+
+		let ULplayer
+		let URplayer
+		let DRplayer
+		let DLplayer
+
+		let outULplayerONE = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideUpLeft.position.left 
+			&& piece.position.top === outsideUpLeft.position.top).length;
+		let outURplayerONE = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideUpRight.position.left 
+			&& piece.position.top === outsideUpRight.position.top).length;
+		let outDRplayerONE = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideDownRight.position.left 
+			&& piece.position.top === outsideDownRight.position.top).length;
+		let outDLplayerONE = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideDownLeft.position.left 
+			&& piece.position.top === outsideDownLeft.position.top).length;
+
+
+		let outULplayerTWO = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideUpLeft.position.left 
+			&& piece.position.top === outsideUpLeft.position.top).length;
+		let outURplayerTWO = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideUpRight.position.left 
+			&& piece.position.top === outsideUpRight.position.top).length;
+		let outDRplayerTWO = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideDownRight.position.left 
+			&& piece.position.top === outsideDownRight.position.top).length;
+		let outDLplayerTWO = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideDownLeft.position.left 
+			&& piece.position.top === outsideDownLeft.position.top).length;		
+
+		let anyPlayerOutUL = outULplayerONE + outULplayerTWO;
+		let anyPlayerOutUR = outURplayerONE + outURplayerTWO;
+		let anyPlayerOutDR = outDRplayerONE + outDRplayerTWO;
+		let anyPlayerOutDL = outDLplayerONE + outDLplayerTWO;
+
+		if(piece.player === 1){
+			ULplayer = this.state.piecesTwo.filter(piece => 
+			piece.position.left === upLeft.position.left 
+			&& piece.position.top === upLeft.position.top).length;
+
+			URplayer = this.state.piecesTwo.filter(piece => 
+			piece.position.left === upRight.position.left 
+			&& piece.position.top === upRight.position.top).length;			
+
+			DRplayer = this.state.piecesTwo.filter(piece => 
+			piece.position.left === downRight.position.left 
+			&& piece.position.top === downRight.position.top).length;	
+
+			DLplayer = this.state.piecesTwo.filter(piece => 
+			piece.position.left === downLeft.position.left 
+			&& piece.position.top === downLeft.position.top).length;
+		}
+
+		if(piece.player === 2){
+			ULplayer = this.state.piecesOne.filter(piece => 
+			piece.position.left === upLeft.position.left 
+			&& piece.position.top === upLeft.position.top).length;
+
+			URplayer = this.state.piecesOne.filter(piece => 
+			piece.position.left === upRight.position.left 
+			&& piece.position.top === upRight.position.top).length;			
+
+			DRplayer = this.state.piecesOne.filter(piece => 
+			piece.position.left === downRight.position.left 
+			&& piece.position.top === downRight.position.top).length;	
+
+			DLplayer = this.state.piecesOne.filter(piece => 
+			piece.position.left === downLeft.position.left 
+			&& piece.position.top === downLeft.position.top).length;
+		}
+
+		console.log("Out UL p1: ", outULplayerONE);
+		console.log("Out UR p1: ", outURplayerONE);
+		console.log("Out DR p1: ", outDRplayerONE);
+		console.log("Out DL p1: ", outDLplayerONE);
+
+		console.log("OUT UL p2: ", outULplayerTWO);
+		console.log("OUT UR p2: ", outURplayerTWO);
+		console.log("OUT DR p2: ", outDRplayerTWO);
+		console.log("OUT DL p2: ", outDLplayerTWO);
+
+		if(outsideUpRight.position.left > 331){
+			anyPlayerOutUR = 1;
+		}
 		
+		if(outsideUpLeft.position.left < 7){
+			anyPlayerOutUL = 1;
+		}
+		
+		if(outsideUpRight.position.top < 7){
+			anyPlayerOutUR = 1;
+		}
+		
+		if(outsideUpLeft.position.top < 7){
+			anyPlayerOutUL = 1;
+		}
+
+		if(outsideDownRight.position.left > 331){
+			anyPlayerOutDR = 1;
+		}
+		
+		if(outsideDownLeft.position.left < 7){
+			anyPlayerOutDL = 1;
+		}
+		
+		if(outsideDownRight.position.top > 331){
+			anyPlayerOutDR = 1;
+		}
+		
+		if(outsideDownLeft.position.top > 331){
+			anyPlayerOutDL = 1;
+		}
+
+		if(ULplayer === 1 && anyPlayerOutUL === 1){
+			ULplayer = 0;
+		}
+		if(URplayer === 1 && anyPlayerOutUR === 1){
+			URplayer = 0;
+		}
+		if(DRplayer === 1 && anyPlayerOutDR === 1){
+			DRplayer = 0;
+		}
+		if(DLplayer === 1 && anyPlayerOutDL === 1){
+			DLplayer = 0;
+		}
+
+		// console.log("UL Player Value: ", ULplayer);
+		// console.log("UR Player Value: ", URplayer);
+		// console.log("DR Player Value: ", DRplayer);
+		// console.log("DL Player Value: ", DLplayer);
+		// console.log("===GOING OUTSIDE====");
+		// console.log("Any Out UL Value: ", anyPlayerOutUL);
+		// console.log("Any Out UR Value: ", anyPlayerOutUR);
+		// console.log("Any Out DR Value: ", anyPlayerOutDR);
+		// console.log("Any Out DL Value: ", anyPlayerOutDL);
+		// console.log("++++++LINE BREAK++++++");
+
+
+		if(ULplayer === 0 && URplayer === 0 && DRplayer === 0 && DLplayer === 0){
+			if(piece.player === 1){
+				this.playerOneTurn = false;
+				this.pieceSelected = false;
+				this.setState({});				
+			}
+			if(piece.player === 2){
+				this.playerOneTurn = true;
+				this.pieceSelected = false;
+				this.setState({});				
+			}			
+
+		}
+
+		if(anyPlayerOutUL + anyPlayerOutUR + anyPlayerOutDR + anyPlayerOutDL >= 3){
+			if(piece.player === 1){
+				this.playerOneTurn = false;
+				this.pieceSelected = false;
+				this.setState({});				
+			}
+			if(piece.player === 2){
+				this.playerOneTurn = true;
+				this.pieceSelected = false;
+				this.setState({});				
+			}	
+		}
+
 	}
 
 			
