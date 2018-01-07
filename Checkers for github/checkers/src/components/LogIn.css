@@ -14,20 +14,22 @@ main {
 .input-field input[type=date]:focus+label,
 .input-field input[type=text]:focus+label,
 .input-field input[type=email]:focus+label,
-.input-field input[type=password]:focus+label {
+.input-field input[type=password]:focus+label,
+input.input-field:focus+label {
     color: #91c74c;
 }
 
 .input-field input[type=date]:focus,
 .input-field input[type=text]:focus,
 .input-field input[type=email]:focus,
-.input-field input[type=password]:focus {
+.input-field input[type=password]:focus,
+input.input-field:focus {
     border-bottom: 2px solid #91c74c;
     box-shadow: none;
 }
 
 .jumbotron {
-    background: url("../assets/images/logo.png") no-repeat center center;
+    background: url("../assets/images/logo2.png") no-repeat center center;
     background-size: 40% 100%;
     background-color: inherit;
     height: 20vh;
@@ -74,7 +76,18 @@ main {
     margin-right: 10px;
 }
 
-#logOutBtn {
+#logOutBtn,
+#gameChatBtn {
     float: right;
     margin: 12px;
+}
+
+a,
+a:hover {
+    color: orange;
+}
+
+input,
+textarea {
+    margin: 12px 0px 12px 0px;
 }

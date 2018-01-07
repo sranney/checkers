@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Icon, Modal, SideNavItem, SideNav, Card, CardTitle, Input, Footer} from 'react-materialize';
+import {Button, Modal, SideNavItem, SideNav, Input, Footer} from 'react-materialize';
 import Board from './Board';
 // import 'materialize-css';
 
@@ -7,11 +7,12 @@ class GamePlayPage extends Component {
     render() {
         return ( 
             <main>
+                <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>  
 
                 <Board />
 
                 <SideNav
-                    trigger={ <a className="btn-floating btn-large waves-effect waves-light orange lighten-1"><i className="material-icons">chat_bubble_outline</i></a>}
+                    trigger={ <a  id="gameChatBtn"  className="btn-floating btn-large waves-effect waves-light orange lighten-1"><i className="material-icons">chat_bubble_outline</i></a>}
                     options={{ closeOnClick: true }}>
                     <SideNavItem userView
                         user={{
@@ -49,10 +50,10 @@ class GamePlayPage extends Component {
                     className="light-green"
                     links={
                     <ul>
-                        <li><a className="grey-text text-lighten-3" href="https://github.com/AaronA05" target="_blank">Aaron Arndt</a></li>
-                        <li><a className="grey-text text-lighten-3" href="https://github.com/satsumao" target="_blank">Matthew Duckworth</a></li>
-                        <li><a className="grey-text text-lighten-3" href="https://github.com/PhilipK2" target="_blank">Philip Kappaz II</a></li>
-                        <li><a className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank">Spencer Ranney</a></li>
+                        <li><a className="grey-text text-lighten-3" href="https://github.com/AaronA05" target="_blank" rel="noopener noreferrer">Aaron Arndt</a></li>
+                        <li><a className="grey-text text-lighten-3" href="https://github.com/satsumao" target="_blank" rel="noopener noreferrer">Matthew Duckworth</a></li>
+                        <li><a className="grey-text text-lighten-3" href="https://github.com/PhilipK2" target="_blank" rel="noopener noreferrer">Philip Kappaz II</a></li>
+                        <li><a className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank" rel="noopener noreferrer">Spencer Ranney</a></li>
                     </ul>
                     }>
                         <h5 className="white-text">Final Project: Check your Checkers</h5>

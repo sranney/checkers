@@ -3,7 +3,7 @@ import {Redirect} from "react-router";
 import {Link} from "react-router-dom";
 
 //materialize
-import {Button, Icon, Modal, SideNavItem, SideNav, Card, CardTitle, Input, Footer} from 'react-materialize';
+import {Button, Modal, SideNavItem, SideNav, Card, CardTitle, Input, Footer} from 'react-materialize';
 import 'materialize-css';
 
 //axios http handler
@@ -103,12 +103,12 @@ this.props.user?
 		title={<span class="orange-text text-lighten-1">Invite a Friend</span>}
 		reveal={
             <form onSubmit={this.sendInvite}>
+            <br/>
                 <p>Send this link to a friend by filling out our email form</p>
                 <Link to={personalizedgameid}>{this.personalizedLink}</Link>
-                <input type="text" ref={(input)=>this.toEmailAddress=input} placeholder="enter friend's email here" name="friendEmail"/>
+                <input type="text" className = "input-field" ref={(input)=>this.toEmailAddress=input} placeholder="enter friend's email here" name="friendEmail"/>
                 Enter an invite message here
                 <textarea ref={(input)=>this.msgBody=input}>{`${name} has invited you to play checkers with him at checkers.com.`}</textarea>
-                
                 <Button type="submit" className = "btn orange lighten-1 waves-effect waves-light z-depth-2">Send Invite!</Button>
             </form>
             }
@@ -121,10 +121,10 @@ this.props.user?
             className="light-green"
             links={
                 <ul>
-                    <li><a key={1} className="grey-text text-lighten-3" href="https://github.com/AaronA05" target="_blank">Aaron Arndt</a></li>
-                    <li><a key={2} className="grey-text text-lighten-3" href="https://github.com/satsumao" target="_blank">Matthew Duckworth</a></li>
-                    <li><a key={3} className="grey-text text-lighten-3" href="https://github.com/PhilipK2" target="_blank">Philip Kappaz II</a></li>
-                    <li><a key={4} className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank">Spencer Ranney</a></li>
+                    <li><a key={1} className="grey-text text-lighten-3" href="https://github.com/AaronA05" target="_blank" rel="noopener noreferrer">Aaron Arndt</a></li>
+                    <li><a key={2} className="grey-text text-lighten-3" href="https://github.com/satsumao" target="_blank" rel="noopener noreferrer">Matthew Duckworth</a></li>
+                    <li><a key={3} className="grey-text text-lighten-3" href="https://github.com/PhilipK2" target="_blank" rel="noopener noreferrer">Philip Kappaz II</a></li>
+                    <li><a key={4} className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank" rel="noopener noreferrer">Spencer Ranney</a></li>
                 </ul>
                 }>
                 <h5 className="white-text">Final Project: Check your Checkers</h5>

@@ -12,7 +12,6 @@ import GamePlayPage from "./components/GamePage";
 import {auth} from "./firebase";
 
 //other modules' imports
-import {Button, Icon, Modal, SideNavItem, SideNav} from 'react-materialize';
 import axios from "axios";
 
 //socket.io configuration stuff
