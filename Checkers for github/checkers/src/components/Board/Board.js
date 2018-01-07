@@ -578,498 +578,216 @@ class Board extends Component {
 	//code will look very similar to to the checkForJumps function but the if statements will determine who's turn it is
 	areThereJumpsLeftForPlayerOne = (piece) => {
 		//this should be a square down and to the left of the current selected piece
-		let adjoiningSquareOne = {
+		let downLeft = {
 			position: {
 				left: piece.position.left - 46,
 				top: piece.position.top + 46
 			}
 		}
 		//this should be a square down and to the right of the current selected piece
-		let adjoiningSquareTwo = {
+		let downRight = {
 			position: {
 				left: piece.position.left + 46,
 				top: piece.position.top + 46
 			}
 		}
-		//check to see if the square down and to the left of selected piece has a player two piece in the square
-		let fullAdjoiningSquareCheckDownLeft = this.state.piecesTwo.filter(piece => 
-			piece.position.left === adjoiningSquareOne.position.left 
-			&& piece.position.top === adjoiningSquareOne.position.top);
-		//check to see if the square down and to the right of selected piece has a player two piece in the square
-		let fullAdjoiningSquareCheckDownRight = this.state.piecesTwo.filter(piece =>
-			piece.position.left === adjoiningSquareTwo.position.left 
-			&& piece.position.top === adjoiningSquareTwo.position.top);
-		//if neither of the squares have a piece, the array will return 0, if both squares are blank it is the other player's turn
-		if(fullAdjoiningSquareCheckDownLeft.length === 0 && fullAdjoiningSquareCheckDownRight.length === 0){
+		let outsideDownLeft = {
+			position: {
+				left: downLeft.position.left - 46,
+				top: downLeft.position.top + 46
+			}
+		}
+		let outsideDownRight = {
+			position: {
+				left: downRight.position.left + 46,
+				top: downRight.position.top + 46
+			}
+		}		
+
+		let playerTwoDL = this.state.piecesTwo.filter(piece => 
+			piece.position.left === downLeft.position.left 
+			&& piece.position.top === downLeft.position.top).length;
+
+		let playerTwoDR = this.state.piecesTwo.filter(piece => 
+			piece.position.left === downRight.position.left 
+			&& piece.position.top === downRight.position.top).length;
+
+		let playerTwoOutsideDL = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideDownLeft.position.left 
+			&& piece.position.top === outsideDownLeft.position.top).length;
+
+		let playerTwoOutsideDR = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideDownRight.position.left 
+			&& piece.position.top === outsideDownRight.position.top).length;
+
+		let playerOneOutsideDL = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideDownLeft.position.left 
+			&& piece.position.top === outsideDownLeft.position.top).length;
+
+		let playerOneOutsideDR = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideDownRight.position.left 
+			&& piece.position.top === outsideDownRight.position.top).length;	
+
+		let anyPieceOutsideDL = playerOneOutsideDL + playerTwoOutsideDL;
+		let anyPieceOutsideDR = playerOneOutsideDR + playerTwoOutsideDR;
+
+		if(outsideDownRight.position.left > 331){
+			anyPieceOutsideDR = 1;
+		}
+		
+		if(outsideDownLeft.position.left < 7){
+			anyPieceOutsideDL = 1;
+		}
+		
+		if(outsideDownRight.position.top > 331){
+			anyPieceOutsideDR = 1;
+		}
+		
+		if(outsideDownLeft.position.top > 331){
+			anyPieceOutsideDL = 1;
+		}
+
+	
+		console.log("Player 2 DL", playerTwoDL);
+		console.log("Player 2 DR", playerTwoDR);
+		console.log("Any player Out Left", anyPieceOutsideDL);
+		console.log("Any player Out Right", anyPieceOutsideDR);
+
+	
+
+		if(playerTwoDL + playerTwoDR === 0){
 			this.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
 		}
-		//if there is a piece down and to the left the openSquareToJump should be the square 'behind' that piece
-		if(fullAdjoiningSquareCheckDownLeft.length === 1 || fullAdjoiningSquareCheckDownLeft.length === 0){
-			let openSquareToJump = {
-				position: {
-					left: piece.position.left - 92,
-					top: piece.position.top + 92					
-				}
-			}
 
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);
+		if(playerTwoDL === 1 && anyPieceOutsideDL === 1 && playerTwoDR === 0){
+			this.playerOneTurn = false;
+			this.pieceSelected = false;
+			this.setState({});
+		}
 
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left
-				&& piece.position.top === openSquareToJump.position.top);
+		if(playerTwoDR === 1 && anyPieceOutsideDR === 1 && playerTwoDL === 0){
+			this.playerOneTurn = false;
+			this.pieceSelected = false;
+			this.setState({});
+		}
 
-			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;	
-			if(openSquareToJump.position.top > 331){
-				anyPieceInSquare = anyPieceInSquare + 1;
-			}		
-
-			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
-			if(fullAdjoiningSquareCheckDownLeft.length === 1 && anyPieceInSquare > 0){
-				this.playerOneTurn = false;
-				this.pieceSelected = false;	
-				this.setState({});
-			}
-			if(fullAdjoiningSquareCheckDownLeft.length === 0 && anyPieceInSquare >= 0){
-				this.playerOneTurn = false;
-				this.pieceSelected = false;	
-				this.setState({});
-			}			
-		}			
-		//if there is a piece down and to the right the openSquareToJump should be the square 'behind' that piece
-		else if(fullAdjoiningSquareCheckDownRight.length === 1 || fullAdjoiningSquareCheckDownRight.length === 0){
-			let openSquareToJump = {
-				position: {
-					left: piece.position.left + 92,
-					top: piece.position.top + 92					
-				}
-			}
-
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);
-
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left
-				&& piece.position.top === openSquareToJump.position.top);
-
-			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;			
-			if(openSquareToJump.position.top > 331){
-				anyPieceInSquare = anyPieceInSquare + 1;
-			}				
-
-			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
-			if(fullAdjoiningSquareCheckDownRight.length === 1 && anyPieceInSquare > 0){
-				this.playerOneTurn = false;
-				this.pieceSelected = false;	
-				this.setState({});
-			}
-			if(fullAdjoiningSquareCheckDownRight.length === 0 && anyPieceInSquare >= 0){
-				this.playerOneTurn = false;
-				this.pieceSelected = false;	
-				this.setState({});
-			}	
+		if(playerTwoDL === 1 && playerTwoDR === 1 && anyPieceOutsideDR === 1 && anyPieceOutsideDL === 1){
+			this.playerOneTurn = false;
+			this.pieceSelected = false;
+			this.setState({});
 		}
 	
 	}
 
 	areThereJumpsLeftForPlayerTwo = (piece) => {
 		//this should be a square down and to the left of the current selected piece
-		let adjoiningSquareThree = {
+		let upLeft = {
 			position: {
 				left: piece.position.left - 46,
 				top: piece.position.top - 46
 			}
 		}
 		//this should be a square down and to the right of the current selected piece
-		let adjoiningSquareFour = {
+		let upRight = {
 			position: {
 				left: piece.position.left + 46,
 				top: piece.position.top - 46
 			}
 		}
-		//check to see if the square down and to the left of selected piece has a player two piece in the square
-		let fullAdjoiningSquareCheckUpLeft = this.state.piecesOne.filter(piece => 
-			piece.position.left === adjoiningSquareThree.position.left 
-			&& piece.position.top === adjoiningSquareThree.position.top);
-		//check to see if the square down and to the right of selected piece has a player two piece in the square
-		let fullAdjoiningSquareCheckUpRight = this.state.piecesOne.filter(piece =>
-			piece.position.left === adjoiningSquareFour.position.left 
-			&& piece.position.top === adjoiningSquareFour.position.top);
-		if(fullAdjoiningSquareCheckUpLeft.length === 0 && fullAdjoiningSquareCheckUpRight.length === 0){
+		let outsideUpLeft = {
+			position: {
+				left: upLeft.position.left - 46,
+				top: upLeft.position.top - 46
+			}
+		}
+		let outsideUpRight = {
+			position: {
+				left: upRight.position.left + 46,
+				top: upRight.position.top - 46
+			}
+		}		
+
+		let playerOneUL = this.state.piecesOne.filter(piece => 
+			piece.position.left === upLeft.position.left 
+			&& piece.position.top === upLeft.position.top).length;
+
+		let playerOneUR = this.state.piecesOne.filter(piece => 
+			piece.position.left === upRight.position.left 
+			&& piece.position.top === upRight.position.top).length;
+
+		let playerTwoOutsideUL = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideUpLeft.position.left 
+			&& piece.position.top === outsideUpLeft.position.top).length;
+
+		let playerTwoOutsideUR = this.state.piecesTwo.filter(piece => 
+			piece.position.left === outsideUpRight.position.left 
+			&& piece.position.top === outsideUpRight.position.top).length;
+
+		let playerOneOutsideUL = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideUpLeft.position.left 
+			&& piece.position.top === outsideUpLeft.position.top).length;
+
+		let playerOneOutsideUR = this.state.piecesOne.filter(piece => 
+			piece.position.left === outsideUpRight.position.left 
+			&& piece.position.top === outsideUpRight.position.top).length;	
+
+		let anyPieceOutsideUL = playerOneOutsideUL + playerTwoOutsideUL;
+		let anyPieceOutsideUR = playerOneOutsideUR + playerTwoOutsideUR;
+
+		if(outsideUpRight.position.left > 331){
+			anyPieceOutsideUR = 1;
+		}
+		
+		if(outsideUpLeft.position.left < 7){
+			anyPieceOutsideUL = 1;
+		}
+		
+		if(outsideUpRight.position.top < 7){
+			anyPieceOutsideUR = 1;
+		}
+		
+		if(outsideUpLeft.position.top < 7){
+			anyPieceOutsideUL = 1;
+		}
+
+	
+		console.log("Player 1 UL", playerOneUL);
+		console.log("Player 1 UR", playerOneUR);
+		console.log("Any player Out Left", anyPieceOutsideUL);
+		console.log("Any player Out Right", anyPieceOutsideUR);
+
+	
+
+		if(playerOneUL + playerOneUR === 0){
 			this.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
 		}
-		//if there is a piece down and to the left the openSquareToJump should be the square 'behind' that piece
-		if(fullAdjoiningSquareCheckUpLeft.length === 1 || fullAdjoiningSquareCheckUpLeft.length === 0){
-			let openSquareToJump = {
-				position: {
-					left: piece.position.left - 92,
-					top: piece.position.top - 92					
-				}
-			}
 
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);
+		if(playerOneUL === 1 && anyPieceOutsideUL === 1 && playerOneUR === 0){
+			this.playerOneTurn = true;
+			this.pieceSelected = false;
+			this.setState({});
+		}
 
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left
-				&& piece.position.top === openSquareToJump.position.top);
+		if(playerOneUR === 1 && anyPieceOutsideUR === 1 && playerOneUL === 0){
+			this.playerOneTurn = true;
+			this.pieceSelected = false;
+			this.setState({});
+		}
 
-			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;			
-			if(openSquareToJump.position.top < 8){
-				anyPieceInSquare = anyPieceInSquare + 1;
-			}
-
-			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
-			if(fullAdjoiningSquareCheckUpLeft.length === 1 && anyPieceInSquare > 0){
-				this.playerOneTurn = true;
-				this.pieceSelected = false;	
-				this.setState({});
-			}
-			if(fullAdjoiningSquareCheckUpLeft.length === 0 && anyPieceInSquare >= 0){
-				this.playerOneTurn = true;
-				this.pieceSelected = false;	
-				this.setState({});
-			}	
-		}			
-		//if there is a piece down and to the right the openSquareToJump should be the square 'behind' that piece
-		else if(fullAdjoiningSquareCheckUpRight.length === 1 || fullAdjoiningSquareCheckUpRight.length === 0){
-			let openSquareToJump = {
-				position: {
-					left: piece.position.left + 92,
-					top: piece.position.top - 92					
-				}
-			}
-
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);
-
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left
-				&& piece.position.top === openSquareToJump.position.top);
-
-			//if both filters return an array of 0, then there is no piece in the openSquareToJump 
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;			
-			if(openSquareToJump.position.top < 8){
-				anyPieceInSquare = anyPieceInSquare + 1;
-			}
-
-			//if one of the filters has a piece in it the array will be greater than 0 and the move will go to player 2 
-			if(fullAdjoiningSquareCheckUpRight.length === 1 && anyPieceInSquare > 0){
-				this.playerOneTurn = true;
-				this.pieceSelected = false;	
-				this.setState({});
-			}
-			if(fullAdjoiningSquareCheckUpRight.length === 0 && anyPieceInSquare >= 0){
-				this.playerOneTurn = true;
-				this.pieceSelected = false;	
-				this.setState({});
-			}
-		}		
+		if(playerOneUL === 1 && playerOneUR === 1 && anyPieceOutsideUR === 1 && anyPieceOutsideUL === 1){
+			this.playerOneTurn = true;
+			this.pieceSelected = false;
+			this.setState({});
+		}
 	}
 
 
 	areThereJumpsLeftForKING = (pieceToCheck) => {
-		//this should be a square down and to the left of the current selected piece
-		let adjoiningSquareOne = {
-			position: {
-				left: pieceToCheck.position.left - 46,
-				top: pieceToCheck.position.top + 46
-			}
-		}
-		//this should be a square down and to the right of the current selected piece
-		let adjoiningSquareTwo = {
-			position: {
-				left: pieceToCheck.position.left + 46,
-				top: pieceToCheck.position.top + 46
-			}
-		}
-		//this should be a square up and to the left of the current selected piece
-		let adjoiningSquareThree = {
-			position: {
-				left: pieceToCheck.position.left - 46,
-				top: pieceToCheck.position.top - 46
-			}
-		}
-		//this should be a square up and to the right of the current selected piece
-		let adjoiningSquareFour = {
-			position: {
-				left: pieceToCheck.position.left + 46,
-				top: pieceToCheck.position.top - 46
-			}
-		}
-		let fullAdjoiningSquareCheckDownLeft
-		let fullAdjoiningSquareCheckDownRight
-		let fullAdjoiningSquareCheckUpLeft
-		let fullAdjoiningSquareCheckUpRight
-
-		if(pieceToCheck.player === 1){
-			//check to see if the square down and to the left of selected piece has a player two piece in the square
-			fullAdjoiningSquareCheckDownLeft = this.state.piecesTwo.filter(piece => 
-				piece.position.left === adjoiningSquareOne.position.left 
-				&& piece.position.top === adjoiningSquareOne.position.top);
-			//check to see if the square down and to the right of selected piece has a player two piece in the square
-			fullAdjoiningSquareCheckDownRight = this.state.piecesTwo.filter(piece =>
-				piece.position.left === adjoiningSquareTwo.position.left 
-				&& piece.position.top === adjoiningSquareTwo.position.top);
-			//check to see if the square up and to the left of selected piece has a player one piece in the square
-			fullAdjoiningSquareCheckUpLeft = this.state.piecesTwo.filter(piece => 
-				piece.position.left === adjoiningSquareThree.position.left 
-				&& piece.position.top === adjoiningSquareThree.position.top);
-			//check to see if the square up and to the right of selected piece has a player one piece in the square
-			fullAdjoiningSquareCheckUpRight = this.state.piecesTwo.filter(piece =>
-				piece.position.left === adjoiningSquareFour.position.left 
-				&& piece.position.top === adjoiningSquareFour.position.top);
-
-		}	
-
-		if(pieceToCheck.player === 2){
-			//check to see if the square down and to the left of selected piece has a player two piece in the square
-			fullAdjoiningSquareCheckDownLeft = this.state.piecesOne.filter(piece => 
-				piece.position.left === adjoiningSquareOne.position.left 
-				&& piece.position.top === adjoiningSquareOne.position.top);
-			//check to see if the square down and to the right of selected piece has a player two piece in the square
-			fullAdjoiningSquareCheckDownRight = this.state.piecesOne.filter(piece =>
-				piece.position.left === adjoiningSquareTwo.position.left 
-				&& piece.position.top === adjoiningSquareTwo.position.top);
-			//check to see if the square up and to the left of selected piece has a player one piece in the square
-			fullAdjoiningSquareCheckUpLeft = this.state.piecesOne.filter(piece => 
-				piece.position.left === adjoiningSquareThree.position.left 
-				&& piece.position.top === adjoiningSquareThree.position.top);
-			//check to see if the square up and to the right of selected piece has a player one piece in the square
-			fullAdjoiningSquareCheckUpRight = this.state.piecesOne.filter(piece =>
-				piece.position.left === adjoiningSquareFour.position.left 
-				&& piece.position.top === adjoiningSquareFour.position.top);
-
-		}			
-	
-		let piecesInSquare = fullAdjoiningSquareCheckDownLeft.length + fullAdjoiningSquareCheckDownRight.length + fullAdjoiningSquareCheckUpRight.length + fullAdjoiningSquareCheckUpLeft.length;
-
-		if(piecesInSquare === 0){
-			if(pieceToCheck.player === 1){
-				this.playerOneTurn = false;
-				this.pieceSelected = false;
-				this.setState({});
-			}
-			if(pieceToCheck.player === 2){
-				this.playerOneTurn = true;
-				this.pieceSelected = false;
-				this.setState({});
-			}
-		}
-				
-		//if there is a piece down and to the left the openSquareToJump should be the square 'behind' that piece
-		if(fullAdjoiningSquareCheckDownLeft.length === 1 || fullAdjoiningSquareCheckDownLeft.length === 0){
-			let openSquareToJump = {
-				position: {
-					left: pieceToCheck.position.left - 92,
-					top: pieceToCheck.position.top + 92					
-				}
-			}
-
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-						
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
-			
-
-			if(fullAdjoiningSquareCheckDownLeft.length === 1 && anyPieceInSquare > 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}
-
-			if(fullAdjoiningSquareCheckDownLeft.length === 0 && anyPieceInSquare >= 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}			
-		}			
-
-		//if there is a piece down and to the right the openSquareToJump should be the square 'behind' that piece
-		else if(fullAdjoiningSquareCheckDownRight.length === 1 || fullAdjoiningSquareCheckDownRight.length === 0 ){
-			let openSquareToJump = {
-				position: {
-					left: pieceToCheck.position.left + 92,
-					top: pieceToCheck.position.top + 92					
-				}
-			}
-
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-						
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
-			//if there is an open square behind the piece move the selected piece to that square
-			//these parameters make sure there is a square to jump to and that the square is part of the board
-			if(fullAdjoiningSquareCheckDownRight.length === 1 && anyPieceInSquare > 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}
-
-			if(fullAdjoiningSquareCheckDownRight.length === 0 && anyPieceInSquare >= 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}
-		}			
-
-		//if there is a piece up and to the left the openSquareToJump should be the square 'behind' that piece
-		else if(fullAdjoiningSquareCheckUpLeft.length === 1 || fullAdjoiningSquareCheckUpLeft.length === 0){
-			let openSquareToJump = {
-				position: {
-					left: pieceToCheck.position.left - 92,
-					top: pieceToCheck.position.top - 92					
-				}
-			}
-
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump by looking for a pieceOne with that position
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-						
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
-			//if there is an open square behind the piece move the selected piece to that square
-			//these parameters make sure there is a square to jump to and that the square is part of the board
-			if(fullAdjoiningSquareCheckUpLeft.length === 1 && anyPieceInSquare > 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}
-
-			if(fullAdjoiningSquareCheckUpLeft.length === 0 && anyPieceInSquare >= 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}
-		}			
-
-		else if(fullAdjoiningSquareCheckUpRight.length === 1 || fullAdjoiningSquareCheckUpRight.length === 0){
-			let openSquareToJump = {
-				position: {
-					left: pieceToCheck.position.left + 92,
-					top: pieceToCheck.position.top - 92					
-				}
-			}
-
-			//checks the square 'behind' the square with a piece in it to see if it is open for a jump
-			let playerTwoPiecesInSquare = this.state.piecesTwo.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-
-			let playerOnePiecesInSquare = this.state.piecesOne.filter(piece =>
-				piece.position.left === openSquareToJump.position.left 
-				&& piece.position.top === openSquareToJump.position.top);					
-						
-			let anyPieceInSquare = playerOnePiecesInSquare.length + playerTwoPiecesInSquare.length;
-			//if there is an open square behind the piece move the selected piece to that square
-			//these parameters make sure there is a square to jump to and that the square is part of the board
-			if(fullAdjoiningSquareCheckUpRight.length === 1 && anyPieceInSquare > 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}
-
-			if(fullAdjoiningSquareCheckUpRight.length === 0 && anyPieceInSquare >= 0){
-				if(pieceToCheck.player === 1){
-					this.playerOneTurn = false;
-					this.pieceSelected = false;
-					this.setState({});
-				}	
-				if(pieceToCheck.player === 2){
-					this.playerOneTurn = true;
-					this.pieceSelected = false;
-					this.setState({});
-				}								
-				
-			}			
-		}		
+		
 	}
 
 			
@@ -1081,10 +799,10 @@ class Board extends Component {
 		let message = null;
 
 		if(playerTurn){
-			message = <h1>Player One</h1>
+			message = <h1>Turn: Player One</h1>
 		}
 		else{
-			message = <h1>Player Two </h1>
+			message = <h1>Turn: Player Two </h1>
 		}
 		return (
 			<div>
