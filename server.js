@@ -16,8 +16,8 @@ var nodemailer = require("nodemailer");
 
 //mongoose models
 var userModel = require("./models/users.js");
-var potluckModel = require("./models/potluck.js");
 var chatModel = require("./models/chat.js");
+var gameRoomModel = require("./models/gameRoom.js");
 
 //body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -55,7 +55,10 @@ app.post("/login",function(req,res){
 	const email = UserData.email;
 	userModel.find({ "email":  email }).then(data => {
 		data.length===0?
-			userModel.create(UserData).then(res => {})
+			userModel.create(UserData).then(res => {
+				const room = UserData.username;
+				gameRoomModel.create({room}).then(res => {})
+			})
 		:
 			null;
 	});
@@ -75,28 +78,6 @@ app.post("/sendInvite",function(req,res){
 	sgMail.send(msg).catch(err=>console.log(err));
 })
 
-//getting list items for home page
-app.get("/home",function(req,res){
-	potluckModel.find({}).then(data=>{
-		res.json(data);
-	})
-})
-
-//posting new list items for home page
-app.post("/home",function(req,res){
-	const potluckObj = req.body;
-	potluckModel.create(potluckObj).then(data=>{
-		res.json(data);
-	})
-})
-
-//deleting items from list
-app.get("/deleteitem/:id",function(req,res){
-	potluckModel.findByIdAndRemove(req.params.id,function(res){
-
-	});
-})
-
 //getting chats for specific chat room
 app.get("/chat_:roomNum",function(req,res){
 	const roomNum = req.params.roomNum;
@@ -104,6 +85,34 @@ app.get("/chat_:roomNum",function(req,res){
 	chatModel.find({room:roomNum}).then(data=>{
 		console.log(data);
 		res.json(data);
+	})
+})
+
+app.post("/checkVacancy",function(req,res){
+	const room = req.body.room;
+	const username = req.body.username;
+	console.log("room: "+room);
+	console.log("username: "+username);
+	gameRoomModel.find({room:room}).then(data=>{
+		console.log(data);
+		if(data.length===0){
+			console.log("no room");
+			res.send("room does not exist")
+		}
+		else if(data[0].opponent.length === 0){
+			console.log("open vacancy");
+			gameRoomModel.update({"room":room},{ $set: { "opponent": username } }).then(data2=>{
+				res.send("you have been added to this room as an opponent")
+			})
+		}
+		else if(data[0].opponent !== username){
+			console.log("no vacancy");
+			res.send("no vacancy");
+		}
+		else if(data[0].opponent === username){
+			console.log("current opponent");
+			res.send("welcome back")
+		}
 	})
 })
 
@@ -142,7 +151,9 @@ const SocketManager = (socket) => {
 
 	//when a user clicks the logout button, an emit is sent from client to server
 	socket.on("logout",user => {
+		console.log("****************************************************************************************************");
 		console.log(user);
+		console.log("****************************************************************************************************");
 		const email = user.email;
 		//updates the user's mongodb document to reflect that the user is now offline
 		logoutUser(email).then(res=>{

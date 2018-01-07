@@ -62,33 +62,39 @@ this.props.user?
 		                user={{
                             background:'https://i.stack.imgur.com/rJzOY.jpg',
                             image: 'http://lorempixel.com/400/200/',
-                            email: 'jdandturk@gmail.com'
+                            email: this.props.user.email
 		                    }}/>
                     <SideNavItem href='#!icon' icon='person_pin'>My Profile</SideNavItem>
                     <SideNavItem divider />
                     <SideNavItem subheader>Online Users</SideNavItem>
                     <SideNavItem divider />
                     {this.props.onlineUsers.map((user,idx) => {
+                        const currUser = this.props.user.displayName;
+                        const onlineUser = user.displayName;
+                        if(currUser !== onlineUser){
                             return (                        
-                                <SideNavItem href='#!icon' icon='face' key={idx}>{user.displayName}
-                                    <Modal bottomSheet
-                                        header = {<h2>{`Your conversation with ${user.displayName}`}</h2>}
-                                        trigger={<Button className = " btn light-green waves-effect waves-light" id="chat" icon='chat_bubble_outline'></Button>}>
-                                        <div className="card-panel grey darken-3">
-                                            <span class="orange-text text-lighten-1"><p>Say bro, you down to brawl?</p></span>
+                                    <SideNavItem href='#!icon' icon='face' key={idx}>{user.displayName}
+                                        <Modal bottomSheet
+                                            header = {<h2>{`Your conversation with ${user.displayName}`}</h2>}
+                                            trigger={<Button className = " btn light-green waves-effect waves-light" id="chat" icon='chat_bubble_outline'></Button>}>
+                                            <div className="card-panel grey darken-3">
+                                                <span class="orange-text text-lighten-1"><p>Say bro, you down to brawl?</p></span>
+                                                <br/>
+                                                <span class="blue-text text-lighten-5"><p>Brah, you know I'm always down to brawl.</p></span>
+                                                <br/>
+                                                <span class="orange-text text-lighten-1"><p>Brawl Time!!!!!!!</p></span>
+                                                <br/>
+                                                <span class="blue-text text-lighten-5"><p>....Start the game bro.</p></span>
+                                                <br/>
+                                            </div>
                                             <br/>
-                                            <span class="blue-text text-lighten-5"><p>Brah, you know I'm always down to brawl.</p></span>
-                                            <br/>
-                                            <span class="orange-text text-lighten-1"><p>Brawl Time!!!!!!!</p></span>
-                                            <br/>
-                                            <span class="blue-text text-lighten-5"><p>....Start the game bro.</p></span>
-                                            <br/>
-                                        </div>
-                                        <br/>
-                                        <Input for="text" label="Type your message here" />
-                                    </Modal>
-                                </SideNavItem>
-                            )
+                                            <Input for="text" label="Type your message here" />
+                                        </Modal>
+                                    </SideNavItem>
+                                )
+                            } else {
+                                return <SideNavItem href='#!icon' icon='face' key={idx}>{user.displayName}</SideNavItem>;
+                            }
                         }
                     )
                     }

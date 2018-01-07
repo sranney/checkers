@@ -3,17 +3,18 @@ var mongoose = require("mongoose");
 // Save a reference to the Schema constructor
 var Schema = mongoose.Schema;
 
-var PotluckSchema = new Schema({
-  title:{
+var grSchema = new Schema({
+  room:{
     type:String
   },
-  user:{
-    type:String
-  } 
+  opponent:{
+    type:String,
+    default:""
+  }
 });
 
 // This creates our model from the above schema, using mongoose's model method
-var Potluck = mongoose.model("Potluck", PotluckSchema);
+var gameRoom = mongoose.model("gameRoom", grSchema);
 
-// Export the User model
-module.exports = Potluck;
+// Export the gameRoom model
+module.exports = gameRoom;

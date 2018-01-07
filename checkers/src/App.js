@@ -103,7 +103,16 @@ class App extends Component {
             />
           )}
         />
-        <Route exact path= "/gamepage/:id" component={GamePlayPage} />
+        <Route 
+          exact path= "/gamepage/:id" 
+          render = {(routeProps) => (
+            <GamePlayPage
+              {...routeProps}
+              user = {this.state.user}
+              logOut = {this.logOut}
+            />
+          )}
+        />
         <Route component = {NotFound} />
       </Switch>
     </div>

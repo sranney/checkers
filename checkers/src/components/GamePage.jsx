@@ -1,9 +1,57 @@
+//react
 import React, {Component} from "react";
+import {Redirect} from "react-router";
+
+//other modules
+import axios from "axios";
 import {Button, Modal, SideNavItem, SideNav, Input, Footer} from 'react-materialize';
-import Board from './Board';
 // import 'materialize-css';
 
+//components
+import Board from './Board';
+
 class GamePlayPage extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    componentWillReceiveProps(){
+        const room = this.props.match.params.id;
+        if(this.props.user){        
+            const email = this.props.user.email;
+            const username = email.substr(0,email.indexOf("@"));
+            room === username ? 
+                null 
+            : 
+                axios.post("/checkVacancy",{room,username})
+                    .then(res=>{
+                        if(res.data==="room does not exist"||res.data==="no vacancy"){
+                            this.props.history.push("/home");
+                            return;
+                        }
+                    });
+        } else {
+            setTimeout(()=>{
+                if(this.props.user){
+                    const email = this.props.user.email;
+                    const username = email.substr(0,email.indexOf("@"));
+                    room === username ? 
+                        null 
+                    : 
+                        axios.post("/checkVacancy",{room,username})
+                            .then(res=>{
+                                if(res.data==="room does not exist"||res.data==="no vacancy"){
+                                    this.props.history.push("/home");
+                                    return;
+                                }
+                            });                    
+                } else {
+                    this.props.history.push("/");
+                }
+            },1000)
+        }
+    }
+
     render() {
         return ( 
             <main>
@@ -59,7 +107,7 @@ class GamePlayPage extends Component {
                         <h5 className="white-text">Final Project: Check your Checkers</h5>
                         <p className="grey-text text-lighten-4">2017 Fall Cohort of the SMU Coding Bootcamp</p>
                 </Footer>
-            </main>  
+            </main>
             );  
 
 
