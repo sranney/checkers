@@ -97,6 +97,7 @@ class App extends Component {
           render = {(routeProps) => (
             <Home 
               {...routeProps}
+              socket = {this.state.socket}
               user = {this.state.user}
               onlineUsers = {this.state.onlineUsers}
               logOut = {this.logOut}

@@ -4,14 +4,17 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var ChatSchema = new Schema({
-  room:{
+  sender:{
     type:String
+  },
+  room:{
+    type:String//will be username-home and username-game
   },
   date:{
     type:Date,
     default:Date.now()
   },
-  user_email:{
+  otherUser:{
   	type:String
   },
   message:{

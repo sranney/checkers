@@ -1,3 +1,4 @@
+//react stuff
 import React from "react";
 import {Redirect} from "react-router";
 import {Link} from "react-router-dom";
@@ -8,6 +9,9 @@ import 'materialize-css';
 
 //axios http handler
 import axios from "axios";
+
+//components
+import ChatModal from "./Chat";
 
 class Home extends React.Component {
 
@@ -69,27 +73,17 @@ this.props.user?
                     <SideNavItem subheader>Online Users</SideNavItem>
                     <SideNavItem divider />
                     {this.props.onlineUsers.map((user,idx) => {
-                        const currUser = this.props.user.displayName;
-                        const onlineUser = user.displayName;
+                        const currUser = this.props.user.email;
+                        const onlineUser = user.email;
                         if(currUser !== onlineUser){
                             return (                        
                                     <SideNavItem href='#!icon' icon='face' key={idx}>{user.displayName}
-                                        <Modal bottomSheet
-                                            header = {<h2>{`Your conversation with ${user.displayName}`}</h2>}
-                                            trigger={<Button className = " btn light-green waves-effect waves-light" id="chat" icon='chat_bubble_outline'></Button>}>
-                                            <div className="card-panel grey darken-3">
-                                                <span class="orange-text text-lighten-1"><p>Say bro, you down to brawl?</p></span>
-                                                <br/>
-                                                <span class="blue-text text-lighten-5"><p>Brah, you know I'm always down to brawl.</p></span>
-                                                <br/>
-                                                <span class="orange-text text-lighten-1"><p>Brawl Time!!!!!!!</p></span>
-                                                <br/>
-                                                <span class="blue-text text-lighten-5"><p>....Start the game bro.</p></span>
-                                                <br/>
-                                            </div>
-                                            <br/>
-                                            <Input for="text" label="Type your message here" />
-                                        </Modal>
+                                        <ChatModal 
+                                            location={this.props.location.pathname}
+                                            currUser={this.props.user} 
+                                            user={user}
+                                            socket={this.props.socket}
+                                        />
                                     </SideNavItem>
                                 )
                             } else {

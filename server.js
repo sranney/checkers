@@ -116,6 +116,16 @@ app.post("/checkVacancy",function(req,res){
 	})
 })
 
+app.post("/chats-home",(req,res)=>{
+	const {currUsername,otherUsername} = req.body;
+	chatModel.find({room:`${currUsername}-home`}).then(data=>{
+		const msgArr = data.filter(msg =>{
+			return msg.sender === otherUsername || msg.otherUser === otherUsername
+		})
+		res.json(msgArr);
+	});
+})
+
 //socket io functions - function called and set up with the on connection event - socket is the individual client's socket
 const SocketManager = (socket) => {
 
@@ -140,20 +150,31 @@ const SocketManager = (socket) => {
 	})
 
 	//listening for when a chat has been sent from the client to the server
-	socket.on("chat",(msgObj)=>{
+	socket.on("chat-home",(msgObj)=>{
+		const {sender,message,to} = msgObj;
+		const firstDataObj = {
+			sender,
+			room:`${sender}-home`,
+			otherUser:to,
+			message
+		}
+		const secondDataObj = {
+			sender,
+			room:`${to}-home`,
+			otherUser:sender,
+			message
+		}
 		//sending the data that has been sent from the client to mongodb
-		chatModel.create(msgObj).then(data=>{
-			//part of the object sent from the client is the room that the chat is for
-			//send back using this information to the correct room using this room id
-			socket.emit("chat_"+msgObj.room,data);//send back the data that has been added to mongodb
+		chatModel.create(firstDataObj).then(data=>{
+			chatModel.create(secondDataObj).then(data2=>{
+				io.emit(`chat_${sender}_${to}`,msgObj);
+				io.emit(`chat_${to}_${sender}`,msgObj);					
+			})
 		})
 	})
 
 	//when a user clicks the logout button, an emit is sent from client to server
 	socket.on("logout",user => {
-		console.log("****************************************************************************************************");
-		console.log(user);
-		console.log("****************************************************************************************************");
 		const email = user.email;
 		//updates the user's mongodb document to reflect that the user is now offline
 		logoutUser(email).then(res=>{
