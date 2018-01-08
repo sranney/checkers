@@ -93,7 +93,7 @@ this.props.user?
                     )
                     }
                 </SideNav>]}>
-        <p>Go head to head with an opponent by clicking here!</p>
+        <p>Challenge an opponent by clicking here!</p>
     </Card>
     <br/>
 
