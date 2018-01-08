@@ -3,6 +3,8 @@ import './Board.css';
 import squares from './square.json';
 import piecesOne from './piecesOne.json';
 import piecesTwo from './piecesTwo.json';
+import openSocket from 'socket.io-client';
+const socket = openSocket('http://localhost:5000');
 
 class Board extends Component {
 	//constructor for the entire board, all pieces, and variables needed to manage movements on board
@@ -11,18 +13,24 @@ class Board extends Component {
 			this.state = {
 				squares,
 				piecesOne,
-				piecesTwo
+				piecesTwo,
+				playerOneTurn: true
 			}
 			this.squareToMoveTo = "";
 			this.pieceToMove = "";
 			this.pieceSelected = false;
-			this.playerOneTurn = true;
+	}
+
+	componentDidMount = () => {
+		socket.on("board settings", data => {
+			this.setState(data);
+		})
 	}
 
 	//this is implemented on the playerOne "onClick" function in return/render statement
 	findMovesOne = (id) => {
 		// playerOneTurn must be true before it will run any other code to move that piece
-		if(this.playerOneTurn){
+		if(this.state.playerOneTurn){
 			//filters the current list of piecesOne to find the one that was selected and sets it a variable which will be used to know which piece will move
 			let thisPiece = this.state.piecesOne.filter(piece => piece.id === id);
 			//filter returns an array (in this case with only one element) so we select it as the full element to use the attribute at a later time throughout other functions
@@ -43,7 +51,7 @@ class Board extends Component {
 	//this is implemented on the playerTwo "onClick" function in return/render statement
 	findMovesTwo = (id) => {
 		//if it is not playerOneTurn, it must be playerTwo turn so the rest of this code can run
-		if(!this.playerOneTurn){
+		if(!this.state.playerOneTurn){
 			//filters current list of piecesTwo to find the one selected and sets it to a variable which will be used to know which piece to move
 			let thisPiece = this.state.piecesTwo.filter(piece => piece.id === id);
 			//filter returns an array (of 1) so we select the full element to be able to compare attributes at a later time throughout other functions
@@ -95,6 +103,13 @@ class Board extends Component {
 			this.pieceSelected = false;			
 			//set the state of the pieces of sqaures to the updated positions
 			this.setState({});
+			socket.emit("set board", {
+				squares: this.state.squares,
+				piecesOne: this.state.piecesOne,
+				piecesTwo: this.state.piecesTwo,
+				playerOneTurn: this.state.playerOneTurn,
+				pieceSelected: this.pieceSelected
+			});
 
 		}
 	}	
@@ -109,7 +124,7 @@ class Board extends Component {
 		//this runs a different if statement for player 1 to make sure they cannot move more than one row down or one column to the left or right
 		if(player.player === 1 && player.king === false){
 			if( (topCheck === -46) && (Math.abs(square.position.left - player.position.left)<47) ){
-				this.playerOneTurn = false;
+				this.state.playerOneTurn = false;
 				return true;
 			}
 		}
@@ -117,7 +132,7 @@ class Board extends Component {
 		//this runs a different if statement for player 2 to make sure they cannot move more than one row up or one column to the left or right
 		if(player.player === 2 && player.king === false){
 			if( (topCheck === 46) && (Math.abs(square.position.left - player.position.left)<47) ){
-				this.playerOneTurn = true;
+				this.state.playerOneTurn = true;
 				return true;
 			}
 		}
@@ -127,7 +142,7 @@ class Board extends Component {
 		if(player.player === 1 && player.king === true){
 			if( (Math.abs(topCheck)===46) && (Math.abs(square.position.left - player.position.left)<47) ){
 				//at the end of the move make sure it turns back to player 2 turn
-				this.playerOneTurn = false;
+				this.state.playerOneTurn = false;
 				return true;
 			}
 		}
@@ -135,7 +150,7 @@ class Board extends Component {
 		if(player.player === 2 && player.king === true){
 			if( (Math.abs(topCheck)===46) && (Math.abs(square.position.left - player.position.left)<47) ){
 				//at the end of the move make sure it turns back to player 1 turn
-				this.playerOneTurn = true;
+				this.state.playerOneTurn = true;
 				return true;
 			}
 		}		
@@ -206,6 +221,13 @@ class Board extends Component {
 				//checks to see if there are any other jumps to make, if not it should be player Two turn
 				this.areThereJumpsLeftForPlayerOne(pieceToCheck);		
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 			}
 		}			
 		//if there is a piece down and to the right the openSquareToJump should be the square 'behind' that piece
@@ -244,6 +266,13 @@ class Board extends Component {
 				//checks to see if there are any other jumps to make, if not it should be player Two turn
 				this.areThereJumpsLeftForPlayerOne(pieceToCheck);
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 			}
 		}
 
@@ -304,6 +333,13 @@ class Board extends Component {
 				}				
 				this.areThereJumpsLeftForPlayerTwo(pieceToCheck);	
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 				
 			}
 		}			
@@ -338,6 +374,13 @@ class Board extends Component {
 				}
 				this.areThereJumpsLeftForPlayerTwo(pieceToCheck);
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 				
 			}			
 		}
@@ -450,6 +493,13 @@ class Board extends Component {
 				fullAdjoiningSquareCheckDownLeft[0].position = {top: 1000, left: 1000};
 				this.areThereJumpsLeftForKING(pieceToCheck);					
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 			}
 		}			
 
@@ -485,6 +535,13 @@ class Board extends Component {
 				pieceToCheck.position = openSquareToJump.position;
 				this.areThereJumpsLeftForKING(pieceToCheck);
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 			}
 		}			
 
@@ -520,6 +577,13 @@ class Board extends Component {
 				fullAdjoiningSquareCheckUpLeft[0].position = {top: 1000, left: 1000};
 				this.areThereJumpsLeftForKING(pieceToCheck);					
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 				
 			}
 		}			
@@ -555,6 +619,13 @@ class Board extends Component {
 				fullAdjoiningSquareCheckUpRight[0].position = {top: 1000, left: 1000};
 				this.areThereJumpsLeftForKING(pieceToCheck);
 				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 				
 			}			
 		}
@@ -567,11 +638,25 @@ class Board extends Component {
 			piece.class = "piece playerOne king";
 			piece.king = true;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}	
 		if(piece.player === 2){
 			piece.class = "piece playerTwo king";
 			piece.king = true;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}	
 
 	}
@@ -652,27 +737,55 @@ class Board extends Component {
 
 
 		if(playerTwoDL + playerTwoDR === 0){
-			this.playerOneTurn = false;
+			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 
 		if(playerTwoDL === 1 && anyPieceOutsideDL === 1 && playerTwoDR === 0){
-			this.playerOneTurn = false;
+			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 
 		if(playerTwoDR === 1 && anyPieceOutsideDR === 1 && playerTwoDL === 0){
-			this.playerOneTurn = false;
+			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 
 		if(playerTwoDL === 1 && playerTwoDR === 1 && anyPieceOutsideDR === 1 && anyPieceOutsideDL === 1){
-			this.playerOneTurn = false;
+			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 	
 	}
@@ -750,27 +863,55 @@ class Board extends Component {
 
 
 		if(playerOneUL + playerOneUR === 0){
-			this.playerOneTurn = true;
+			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 
 		if(playerOneUL === 1 && anyPieceOutsideUL === 1 && playerOneUR === 0){
-			this.playerOneTurn = true;
+			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 
 		if(playerOneUR === 1 && anyPieceOutsideUR === 1 && playerOneUL === 0){
-			this.playerOneTurn = true;
+			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 
 		if(playerOneUL === 1 && playerOneUR === 1 && anyPieceOutsideUR === 1 && anyPieceOutsideUL === 1){
-			this.playerOneTurn = true;
+			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
+			socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});
 		}
 	}
 
@@ -977,28 +1118,56 @@ class Board extends Component {
 
 		if(ULplayer === 0 && URplayer === 0 && DRplayer === 0 && DLplayer === 0){
 			if(piece.player === 1){
-				this.playerOneTurn = false;
+				this.state.playerOneTurn = false;
 				this.pieceSelected = false;
-				this.setState({});				
+				this.setState({});
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});				
 			}
 			if(piece.player === 2){
-				this.playerOneTurn = true;
+				this.state.playerOneTurn = true;
 				this.pieceSelected = false;
-				this.setState({});				
+				this.setState({});	
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});			
 			}			
 
 		}
 
 		if(anyPlayerOutUL + anyPlayerOutUR + anyPlayerOutDR + anyPlayerOutDL >= 3){
 			if(piece.player === 1){
-				this.playerOneTurn = false;
+				this.state.playerOneTurn = false;
 				this.pieceSelected = false;
-				this.setState({});				
+				this.setState({});	
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});			
 			}
 			if(piece.player === 2){
-				this.playerOneTurn = true;
+				this.state.playerOneTurn = true;
 				this.pieceSelected = false;
-				this.setState({});				
+				this.setState({});	
+				socket.emit("set board", {
+					squares: this.state.squares,
+					piecesOne: this.state.piecesOne,
+					piecesTwo: this.state.piecesTwo,
+					playerOneTurn: this.state.playerOneTurn,
+					pieceSelected: this.pieceSelected
+				});			
 			}	
 		}
 
@@ -1009,7 +1178,7 @@ class Board extends Component {
 
 	
 	render() {
-		const playerTurn = this.playerOneTurn;
+		const playerTurn = this.state.playerOneTurn;
 		let message = null;
 
 		if(playerTurn){

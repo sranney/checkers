@@ -189,6 +189,10 @@ const SocketManager = (socket) => {
 
 	})
 
+	socket.on("set board", board => {
+		io.emit("board settings", board);
+	})
+
 }
 
 
