@@ -37,6 +37,7 @@ h2,
     float: right;
     display: flex;
     margin-right: -25px;
+    margin-top: 6px;
 }
 
 #LogInFooter {
