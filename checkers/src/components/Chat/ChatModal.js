@@ -82,7 +82,7 @@ export default class ChatModal extends React.Component {
                             <label for="msg">Enter Message Here</label>
                             <input name="msg" id="msg" ref={input => this.msg=input}/>
                         </div>
-                        <button type="submit">Send Message</button>
+                        <Button className = "btn light-green waves-effect waves-light z-depth-2">Send Message</Button>
                     </form>
                 </div>
             </Modal>        

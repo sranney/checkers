@@ -102,10 +102,10 @@ this.props.user?
 		title={<span class="orange-text text-lighten-1">Invite a Friend</span>}
 		reveal={
             <form onSubmit={this.sendInvite}>
-            <br/>
-                <p>Send this link to a friend by filling out our email form</p>
+                <br/>
+                <p>Send this link to a friend by via email</p>
                 <Link to={personalizedgameid}>{this.personalizedLink}</Link>
-                <input type="text" className = "input-field" ref={(input)=>this.toEmailAddress=input} placeholder="enter friend's email here" name="friendEmail"/>
+                <input type="text" className = "input-field" id="friendEmail"ref={(input)=>this.toEmailAddress=input} placeholder="enter friend's email here" name="friendEmail"/>
                 Enter an invite message here
                 <textarea ref={(input)=>this.msgBody=input}>{`${name} has invited you to play checkers with him at checkers.com.`}</textarea>
                 <Button type="submit" className = "btn orange lighten-1 waves-effect waves-light z-depth-2">Send Invite!</Button>

@@ -1,4 +1,5 @@
 body {
+    font-family: 'Roboto', sans-serif;
     display: flex;
     flex-direction: column;
     background-size: cover;
@@ -7,25 +8,9 @@ body {
     height: 100vh;
 }
 
-main {
-    flex: 1 0 auto;
-}
-
-.input-field input[type=date]:focus+label,
-.input-field input[type=text]:focus+label,
-.input-field input[type=email]:focus+label,
-.input-field input[type=password]:focus+label,
-input.input-field:focus+label {
-    color: #91c74c;
-}
-
-.input-field input[type=date]:focus,
-.input-field input[type=text]:focus,
-.input-field input[type=email]:focus,
-.input-field input[type=password]:focus,
-input.input-field:focus {
-    border-bottom: 2px solid #91c74c;
-    box-shadow: none;
+h2,
+.orange-text.text-lighten-1 {
+    font-family: 'Anton', sans-serif;
 }
 
 .jumbotron {
@@ -91,3 +76,37 @@ input,
 textarea {
     margin: 12px 0px 12px 0px;
 }
+
+.side-nav .userView .circle {
+    margin: 8px;
+}
+
+.card .card-reveal {
+    height: 101%;
+}
+
+.side-nav {
+    text-transform: capitalize;
+}
+
+#friendEmail :focus {
+    color: #91c74c;
+}
+
+
+/* .input-field input[type=date]:focus+label,
+.input-field input[type=text]:focus+label,
+.input-field input[type=email]:focus+label,
+.input-field input[type=password]:focus+label,
+input.input-field:focus+label {
+    color: #91c74c;
+}
+
+.input-field input[type=date]:focus,
+.input-field input[type=text]:focus,
+.input-field input[type=email]:focus,
+.input-field input[type=password]:focus,
+input.input-field:focus {
+    border-bottom: 2px solid #91c74c;
+    box-shadow: none;
+} */
