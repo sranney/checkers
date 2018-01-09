@@ -36,6 +36,10 @@ const io = socketIO(server);//setting up socket io on the above created server
 //listening on port 5000
 server.listen(port);
 
+//wildcard for set-up=================== CAN BE REMOVED ONLY TEST++++++++++
+app.use(express.static('build'));
+app.get('*', (req, res) => res.sendFile(path.resolve('build', 'index.html'));
+
 //setting up mongodb connection
 mongoose.Promise = Promise;
 var connection = "mongodb://heroku_srmw7c1h:qe8445fib7fumucud7r8ukut09@ds245287.mlab.com:45287/heroku_srmw7c1h";
