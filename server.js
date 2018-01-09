@@ -38,7 +38,7 @@ server.listen(port);
 
 //setting up mongodb connection
 mongoose.Promise = Promise;
-var connection = "mongodb://heroku_srmw7c1h:qe8445fib7fumucud7r8ukut09@ds245287.mlab.com:45287/heroku_srmw7c1h";
+var connection = process.env.MONGODB_URI||"mongodb://localhost/checkers";
 mongoose.connect(connection, {
   useMongoClient: true
 });
