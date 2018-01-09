@@ -45,10 +45,10 @@ if(process.env.NODE_ENV==='production'){
 	
 }
 
-// io.configure(function () {  
-//   io.set("transports", ["xhr-polling"]); 
-//   io.set("polling duration", 10); 
-// });
+io.configure(function () {  
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
 
 //setting up mongodb connection
 mongoose.Promise = Promise;
