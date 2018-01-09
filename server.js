@@ -39,7 +39,7 @@ server.listen(port);
 
 //wildcard for set-up=================== CAN BE REMOVED ONLY TEST++++++++++
 app.use(express.static('build'));
-app.get('*', (req, res) => res.sendFile(path.resolve('build', 'index.html')));
+app.get('*', (req, res) => res.sendFile(path.resolve('checkers/build', 'index.html')));
 
 //setting up mongodb connection
 mongoose.Promise = Promise;
