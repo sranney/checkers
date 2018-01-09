@@ -44,6 +44,12 @@ app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/build', '/index.h
 if(process.env.NODE_ENV==='production'){
 	
 }
+
+io.configure(function () {  
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 //setting up mongodb connection
 mongoose.Promise = Promise;
 var connection = process.env.MONGODB_URI || "mongodb://localhost/checkers";
