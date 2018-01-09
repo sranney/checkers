@@ -38,10 +38,11 @@ const io = socketIO(server);//setting up socket io on the above created server
 server.listen(port);
 
 //wildcard for set-up=================== CAN BE REMOVED ONLY TEST++++++++++
-app.use(express.static('build'));
+app.use(express.static('checkers/build'));
+// app.use(express.static('build'));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/build', '/index.html')));
 if(process.env.NODE_ENV==='production'){
-	app.use(express.static('checkers/build'));
+	
 }
 //setting up mongodb connection
 mongoose.Promise = Promise;
