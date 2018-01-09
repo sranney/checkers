@@ -1189,34 +1189,36 @@ class Board extends Component {
 		}
 		return (
 			<div>
-			<div className='board'>
-				{this.state.squares.map(square =>
-					<div 
-						key={square.id}  
-						className={square.class}
-						onClick={() => this.getSquare(square.id)}
-						 >
+				<div className="fullGameBoard">
+					<div className='board'>
+						{this.state.squares.map(square =>
+							<div 
+								key={square.id}  
+								className={square.class}
+								onClick={() => this.getSquare(square.id)}
+								 >
+							</div>
+							)}
+						{this.state.piecesOne.map(piece => 
+							<div 
+								key={piece.id}
+								className={piece.class}
+								style={piece.position}
+								onClick={() => {this.findMovesOne(piece.id)}}
+								>
+							</div>
+							)}
+						{this.state.piecesTwo.map(piece => 
+							<div 
+								key={piece.id}
+								className={piece.class}
+								style={piece.position}
+								onClick={() => this.findMovesTwo(piece.id)}
+								>
+							</div>
+							)}					
 					</div>
-					)}
-				{this.state.piecesOne.map(piece => 
-					<div 
-						key={piece.id}
-						className={piece.class}
-						style={piece.position}
-						onClick={() => {this.findMovesOne(piece.id)}}
-						>
-					</div>
-					)}
-				{this.state.piecesTwo.map(piece => 
-					<div 
-						key={piece.id}
-						className={piece.class}
-						style={piece.position}
-						onClick={() => this.findMovesTwo(piece.id)}
-						>
-					</div>
-					)}					
-			</div>
+				</div>
 			<div>
 				{message}
 			</div>

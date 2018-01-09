@@ -1,7 +1,12 @@
-
+.fullGameBoard {
+    position: relative;
+    top: 50px;
+    left: 50%;
+}
 .board {
     
     float: left;
+    /*position: relative;*/
     
     
     height:386px;
@@ -55,7 +60,7 @@ div.piece {
     border-radius: 50%;
     z-index: 10;
     margin: 7px;
-    margin-top: 25px;
+    margin-top: 8px;
 }
 
 div.piece.playerOne {
