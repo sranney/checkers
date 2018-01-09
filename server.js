@@ -46,7 +46,7 @@ if(process.env.NODE_ENV==='production'){
 }
 //setting up mongodb connection
 mongoose.Promise = Promise;
-var connection = process.env.MONGODB_URI;
+var connection = process.env.MONGODB_URI || "mongodb://localhost/checkers";
 mongoose.connect(connection, {
   useMongoClient: true
 });
