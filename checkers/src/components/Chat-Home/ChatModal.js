@@ -171,7 +171,7 @@ export default class ChatModal extends React.Component {
                             className = "btn light-green waves-effect waves-light z-depth-2"
                             onClick = {this.SendRoomLink}
                         >
-                            Send Message
+                            Send Room
                         </Button>                       
                     </form>
                 </div>
