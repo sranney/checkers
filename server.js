@@ -41,6 +41,9 @@ server.listen(port);
 app.use(express.static('checkers/build'));
 // app.use(express.static('build'));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/build', '/index.html')));
+app.get('/home', (req, res) => res.sendFile(path.join(__dirname, '/build', '/index.html')));
+app.get('/GamePage/:id', (req, res) => res.sendFile(path.join(__dirname, '/build', '/index.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/build', '/index.html')));
 if(process.env.NODE_ENV==='production'){
 	
 }
