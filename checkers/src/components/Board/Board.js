@@ -1182,10 +1182,10 @@ class Board extends Component {
 		let message = null;
 
 		if(playerTurn){
-			message = <h1>Turn: Player One</h1>
+			message = <h1>Your Turn</h1>
 		}
 		else{
-			message = <h1>Turn: Player Two </h1>
+			message = <h1>Opponent's Turn</h1>
 		}
 		return (
 			<div>
