@@ -109,6 +109,7 @@ class App extends Component {
           render = {(routeProps) => (
             <GamePlayPage
               {...routeProps}
+              socket={this.state.socket}
               user = {this.state.user}
               logOut = {this.logOut}
             />

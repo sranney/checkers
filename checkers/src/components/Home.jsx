@@ -11,7 +11,7 @@ import 'materialize-css';
 import axios from "axios";
 
 //components
-import ChatModal from "./Chat";
+import ChatModal from "./Chat-Home";
 
 class Home extends React.Component {
 
@@ -52,7 +52,13 @@ class Home extends React.Component {
 this.props.user?
 
 <main>  
-    <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>       
+    <Button 
+        type="submit" 
+        id="logOutBtn" 
+        className = "btn orange lighten-1 waves-effect waves-light z-depth-5" 
+        onClick={this.props.logOut}>
+        Logout
+    </Button>       
     <div className="container">
         <div className="jumbotron text-center"></div>
     <Card className='small'
@@ -66,6 +72,7 @@ this.props.user?
 		                user={{
                             background:'https://i.stack.imgur.com/rJzOY.jpg',
                             image: 'http://lorempixel.com/400/200/',
+                            name: this.props.user.displayName,
                             email: this.props.user.email
 		                    }}/>
                     <SideNavItem href='#!icon' icon='person_pin'>My Profile</SideNavItem>
@@ -74,10 +81,16 @@ this.props.user?
                     <SideNavItem divider />
                     {this.props.onlineUsers.map((user,idx) => {
                         const currUser = this.props.user.email;
+                        const currUsername = currUser.substr(0,currUser.indexOf("@"));
                         const onlineUser = user.email;
-                        if(currUser !== onlineUser){
+                        const onlineUsername = onlineUser.substr(0,onlineUser.indexOf("@"));
+                        if(currUser !== onlineUser){//if it isn't the currently logged in user show a modal button to talk to that person
                             return (                        
-                                    <SideNavItem href='#!icon' icon='face' key={idx}>{user.displayName}
+                                    <SideNavItem href='#!icon' icon='face' key={idx}>{onlineUsername}{/*display their name*/}
+                                        {/*where is this chat modal mounted*/}
+                                        {/*who's browser is this modal on*/}
+                                        {/*other online user that communicates with online user with this modal*/}
+                                        {/*socket used for real-time comm --passed from app.js*/}
                                         <ChatModal 
                                             location={this.props.location.pathname}
                                             currUser={this.props.user} 
@@ -86,8 +99,8 @@ this.props.user?
                                         />
                                     </SideNavItem>
                                 )
-                            } else {
-                                return <SideNavItem href='#!icon' icon='face' key={idx}>{user.displayName}</SideNavItem>;
+                            } else {//otherwise just show the currently online user's name
+                                return <SideNavItem href='#!icon' icon='face' key={idx}>{currUsername}</SideNavItem>;
                             }
                         }
                     )

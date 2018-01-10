@@ -45,14 +45,9 @@ if(process.env.NODE_ENV==='production'){
 	
 }
 
-io.configure(function () {  
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
-
 //setting up mongodb connection
 mongoose.Promise = Promise;
-var connection = process.env.MONGODB_URI || "mongodb://localhost/checkers";
+var connection = process.env.MONGODB_URI||"mongodb://localhost/checkers";
 mongoose.connect(connection, {
   useMongoClient: true
 });
@@ -140,6 +135,20 @@ app.post("/chats-home",(req,res)=>{
 	});
 })
 
+app.post("/chats-game",(req,res)=>{
+	let {location,currUsername,otherUsername} = req.body;
+	location = location.replace("/GamePage/","");
+	console.log("Location: "+location);
+	const visitor = location === currUsername ? otherUsername : currUsername;
+	chatModel.find({room:`${location}-game`}).then(data=>{
+
+		const msgArr = data.filter(msg =>{
+			return msg.sender === visitor || msg.otherUser === visitor
+		})
+		res.json(msgArr);
+	});
+})
+
 //socket io functions - function called and set up with the on connection event - socket is the individual client's socket
 const SocketManager = (socket) => {
 
@@ -185,6 +194,51 @@ const SocketManager = (socket) => {
 				io.emit(`chat_${to}_${sender}`,msgObj);					
 			})
 		})
+	})
+
+	socket.on("chat-game",(msgObj)=>{
+		console.log("socket - chat-game - received");
+		const {location,sender,to,message} = msgObj;
+		console.log(location);
+		const dataObj = {
+			sender,
+			room:`${sender}-game`,
+			otherUser:to,
+			message
+		}
+		//sending the data that has been sent from the client to mongodb
+		chatModel.create(dataObj).then(data=>{
+			console.log(`chat_${location}`);
+			io.emit(`chat_game_${location}`,msgObj);				
+		})
+	})
+
+	socket.on("typing-home",typingObj=>{
+		console.log("typing sent to server");
+		const {currUsername,otherUsername,isTyping} = typingObj;
+		const socketListenerID = `${otherUsername}_${currUsername}`;		
+		const typingRes = isTyping ? currUsername : false;
+		console.log(socketListenerID);
+		io.emit(`typing_home_${socketListenerID}`,typingRes);
+	})
+
+	socket.on("game connect",playerObj=>{
+		const {room,username} = playerObj;
+		gameRoomModel.find({room}).then(data=>{
+			let gamePlayers = "";
+			if(data[0].opponent===""){
+				if(room!==username){
+					gamePlayers = [room,username];
+				}
+				else {
+					gamePlayers = [room,"no opponent yet"];
+				}
+			}
+			else {
+				gamePlayers = [room,data[0].opponent];
+			}
+			io.emit(`game_connect_${room}`,gamePlayers);
+		})		
 	})
 
 	//when a user clicks the logout button, an emit is sent from client to server
