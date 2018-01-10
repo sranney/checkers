@@ -16,7 +16,7 @@ import axios from "axios";
 
 //socket.io configuration stuff
 import io from "socket.io-client";
-const socketUrl = "https://react-socketio-checkers.herokuapp.com";
+const socketUrl = "ws://react-socketio-checkers.herokuapp.com:80/socket.io/?EIO=4&transport=websocket";
 
 class NotFound extends React.Component {//component for 404
   render(){
