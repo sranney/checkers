@@ -16,7 +16,7 @@ import axios from "axios";
 
 //socket.io configuration stuff
 import io from "socket.io-client";
-/*const socketUrl = "https://firebasereact.herokuapp.com";*/
+const socketUrl = "https://react-socketio-checkers.herokuapp.com";
 
 class NotFound extends React.Component {//component for 404
   render(){
@@ -44,7 +44,7 @@ class App extends Component {
   }
 
   initSocket = () => {
-    const socket = io();
+    const socket = io(socketUrl);
     socket.on("user connected",onlineUsers=>{
       this.setState({onlineUsers});
     });
