@@ -4,7 +4,7 @@ import {Redirect} from "react-router";
 import {Link} from "react-router-dom";
 
 //materialize
-import {Button, Modal, SideNavItem, SideNav, Card, CardTitle, Input, Footer} from 'react-materialize';
+import {Button, Modal, SideNavItem, SideNav, Card, CardTitle, Input, Footer, Toast} from 'react-materialize';
 import 'materialize-css';
 
 //axios http handler
@@ -19,6 +19,10 @@ class Home extends React.Component {
         super(props);
         this.sendInvite = this.sendInvite.bind(this);
         this.personalizedLink = "";
+    }
+
+    componentDidMount(){
+        const {socket} = this.props;
     }
 
     sendInvite = (e) =>{

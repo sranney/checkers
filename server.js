@@ -40,14 +40,6 @@ server.listen(port);
 //wildcard for set-up=================== CAN BE REMOVED ONLY TEST++++++++++
 app.use(express.static('checkers/build'));
 // app.use(express.static('build'));
-app.get('*', (req, res) => {
-	console.log(req);
-	res.sendFile(path.join(__dirname, '/index.html'))
-});
-
-if(process.env.NODE_ENV==='production'){
-	
-}
 
 //setting up mongodb connection
 mongoose.Promise = Promise;
@@ -152,6 +144,16 @@ app.post("/chats-game",(req,res)=>{
 		res.json(msgArr);
 	});
 })
+
+app.get('*', (req, res) => {
+	console.log(req);
+	res.sendFile(path.join(__dirname, '/index.html'))
+});
+
+if(process.env.NODE_ENV==='production'){
+	
+}
+
 
 //socket io functions - function called and set up with the on connection event - socket is the individual client's socket
 const SocketManager = (socket) => {
