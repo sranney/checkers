@@ -16,7 +16,6 @@ import axios from "axios";
 
 //socket.io configuration stuff
 import io from "socket.io-client";
-
 const socketUrl = "http://localhost:5000";
 
 class NotFound extends React.Component {//component for 404
@@ -45,7 +44,7 @@ class App extends Component {
   }
 
   initSocket = () => {
-    const socket = io(socketUrl);
+    const socket = io();
     socket.on("user connected",onlineUsers=>{
       this.setState({onlineUsers});
     });
