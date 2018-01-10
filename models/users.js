@@ -22,6 +22,10 @@ var UsersSchema = new Schema({
   online:{
     type:Boolean,
     default:true
+  },
+  socket:{
+    type:String,
+    default:""
   }
 });
 

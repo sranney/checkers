@@ -46,6 +46,7 @@ class App extends Component {
   initSocket = () => {
     const socket = io();
     socket.on("user connected",onlineUsers=>{
+      console.log(onlineUsers);
       this.setState({onlineUsers});
     });
 

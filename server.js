@@ -154,29 +154,100 @@ if(process.env.NODE_ENV==='production'){
 	
 }
 
+let onlineUsersArr = [];
+let trueDisconnect = true;
 
 //socket io functions - function called and set up with the on connection event - socket is the individual client's socket
 const SocketManager = (socket) => {
 
-	let sendMessageToChatFromUser;
-	let sendTypingFromUser;
-
 	//event listener for when either home or chat pages are loaded successfully - this can only occur when the user is signed in
 	socket.on("user connected",(user)=>{
-		console.log("received");
-		const email = user.email;
-		//updating user's document in mongodb to reflect that the user is online
-		loginUser( email ).then( res => {
-			//getting list of online users from mongodb
-			onlineUsers( ).then( res2 => {
-				//emitting back to client the list of online users
-				io.emit( "user connected" , res2 );
-			
-			})
+		const email = user.email;//get email for current user (the one that set this function off)
 
+		const username=email.substr(0,email.indexOf("@"))//compute username
+		const userObjForOnlineUsers = {socket,email,username};//collect data to be used with this socket and that will be put in the array
+		onlineUsers_currUser = onlineUsersArr.filter(user=>{//
+			return user.email === email;
 		})
+		console.log("***************************************")
+		console.log(onlineUsers_currUser);
+		console.log("***************************************")
+		if(onlineUsers_currUser.length === 0 ){ 
+			onlineUsersArr.push(userObjForOnlineUsers)
+		} else {
+			onlineUsersArr = onlineUsersArr.map(user=>{
+				if(user.email === email){
+					user.socket = socket;
+				}
+				return user;
+			})
+			trueDisconnect = false;
+		}
+
+		const onlineUsers_userdata = onlineUsersArr.map(user=>{
+			return {username:user.username,email:user.email};
+		})
+		io.emit( "user connected" , onlineUsers_userdata );	
+		//updating user's document in mongodb to reflect that the user is online
+		// loginUser( email,socket ).then( res => {
+		// 	//getting list of online users from mongodb
+		// 	onlineUsers( ).then( res2 => {
+		// 		//emitting back to client the list of online users
+		// 		io.emit( "user connected" , res2 );
+			
+		// 	})
+
+		// })
+	})
+
+	socket.on("disconnect", () => {
+		console.log(`disconnected socket: ${socket.id}`);
+		onlineUsersArr = onlineUsersArr.filter(user=>{
+			return user.socket !==socket;
+		})
+		const onlineUsers_userdata = onlineUsersArr.map(user=>{
+			return {username:user.username,email:user.email};
+		})
+		io.emit( "user connected" , onlineUsers_userdata );	
+		// const email = user.email;
+		// //updates the user's mongodb document to reflect that the user is now offline
+		
+		// logoutUser(email).then(res=>{
+		// 	//gets current list of online users from mongodb and sends to client
+		// 	onlineUsers().then(res2=>{
+		
+		// 		io.emit("user connected",res2);
+		
+		// 	})
+		
+		// })
 
 	})
+
+	//when a user clicks the logout button, an emit is sent from client to server
+	socket.on("logout",user => {
+		const email = user.email;
+		onlineUsersArr = onlineUsersArr.filter(user=>{
+			return user.email !==email;
+		})
+		const onlineUsers_userdata = onlineUsersArr.map(user=>{
+			const {username,email} = user;
+			return {username,email};
+		})
+		io.emit( "user connected" , onlineUsers_userdata );	
+		//updates the user's mongodb document to reflect that the user is now offline
+		// logoutUser(email).then(res=>{
+		// 	//gets current list of online users from mongodb and sends to client
+		// 	onlineUsers().then(res2=>{
+		
+		// 		io.emit("user connected",res2);
+		
+		// 	})
+		
+		// })
+
+	})
+
 
 	//listening for when a chat has been sent from the client to the server
 	socket.on("chat-home",(msgObj)=>{
@@ -247,21 +318,6 @@ const SocketManager = (socket) => {
 		})		
 	})
 
-	//when a user clicks the logout button, an emit is sent from client to server
-	socket.on("logout",user => {
-		const email = user.email;
-		//updates the user's mongodb document to reflect that the user is now offline
-		logoutUser(email).then(res=>{
-			//gets current list of online users from mongodb and sends to client
-			onlineUsers().then(res2=>{
-		
-				io.emit("user connected",res2);
-		
-			})
-		
-		})
-
-	})
 
 	socket.on("set board", board => {
 		io.emit("board settings", board);
@@ -276,8 +332,8 @@ function onlineUsers(){
 }
 
 //mongodb update user to online status function
-function loginUser (email){
-	return userModel.update({"email":email},{ $set: { "online": true } })
+function loginUser (email,socket){
+	return userModel.update({"email":email},{ $set: { "online": true, "socket":socket } })
 }
 
 //mongodb update user to offline status function
@@ -285,6 +341,9 @@ function logoutUser (email){
 	return userModel.update({"email":email},{ $set: { "online": false } })
 }
 
+function findUserBySocket(socket){
+	return userModel.find({socket:socket})
+}
 //sets up the SocketManager function for the socket that has been picked up
 io.on("connection",SocketManager);
 

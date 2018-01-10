@@ -22,7 +22,7 @@ class GamePlayPage extends Component {
         }
     }
 
-    componentWillReceiveProps(){
+    componentDidUpdate(){
         const room = this.props.match.params.id;
         if(this.props.user){        
             const email = this.props.user.email;

@@ -87,7 +87,7 @@ this.props.user?
                         const currUser = this.props.user.email;
                         const currUsername = currUser.substr(0,currUser.indexOf("@"));
                         const onlineUser = user.email;
-                        const onlineUsername = onlineUser.substr(0,onlineUser.indexOf("@"));
+                        const onlineUsername = user.username;
                         if(currUser !== onlineUser){//if it isn't the currently logged in user show a modal button to talk to that person
                             return (                        
                                     <SideNavItem href='#!icon' icon='face' key={idx}>{onlineUsername}{/*display their name*/}
