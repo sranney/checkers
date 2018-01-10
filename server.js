@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //port
-var port = process.env.port || process.env.PORT || 3001;
+var port = process.env.port || process.env.PORT || 5000;
 
 //creating server - necessary to use socket io with
 var server = require("http").createServer(app);

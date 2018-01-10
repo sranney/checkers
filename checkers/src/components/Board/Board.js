@@ -3,26 +3,27 @@ import './Board.css';
 import squares from './square.json';
 import piecesOne from './piecesOne.json';
 import piecesTwo from './piecesTwo.json';
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:5000');
+// import openSocket from 'socket.io-client';
+// const socket = openSocket('http://localhost:5000');
 
 class Board extends Component {
 	//constructor for the entire board, all pieces, and variables needed to manage movements on board
-	constructor() {
-		super() 
+	constructor(props) {
+		super(props) 
 			this.state = {
 				squares,
 				piecesOne,
 				piecesTwo,
 				playerOneTurn: true
 			}
+			this.socket = this.props.socket;
 			this.squareToMoveTo = "";
 			this.pieceToMove = "";
 			this.pieceSelected = false;
 	}
 
 	componentDidMount = () => {
-		socket.on("board settings", data => {
+		this.socket.on("board settings", data => {
 			this.setState(data);
 		})
 	}
@@ -103,7 +104,7 @@ class Board extends Component {
 			this.pieceSelected = false;			
 			//set the state of the pieces of sqaures to the updated positions
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 				squares: this.state.squares,
 				piecesOne: this.state.piecesOne,
 				piecesTwo: this.state.piecesTwo,
@@ -221,7 +222,7 @@ class Board extends Component {
 				//checks to see if there are any other jumps to make, if not it should be player Two turn
 				this.areThereJumpsLeftForPlayerOne(pieceToCheck);		
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -266,7 +267,7 @@ class Board extends Component {
 				//checks to see if there are any other jumps to make, if not it should be player Two turn
 				this.areThereJumpsLeftForPlayerOne(pieceToCheck);
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -333,7 +334,7 @@ class Board extends Component {
 				}				
 				this.areThereJumpsLeftForPlayerTwo(pieceToCheck);	
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -374,7 +375,7 @@ class Board extends Component {
 				}
 				this.areThereJumpsLeftForPlayerTwo(pieceToCheck);
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -493,7 +494,7 @@ class Board extends Component {
 				fullAdjoiningSquareCheckDownLeft[0].position = {top: 1000, left: 1000};
 				this.areThereJumpsLeftForKING(pieceToCheck);					
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -535,7 +536,7 @@ class Board extends Component {
 				pieceToCheck.position = openSquareToJump.position;
 				this.areThereJumpsLeftForKING(pieceToCheck);
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -577,7 +578,7 @@ class Board extends Component {
 				fullAdjoiningSquareCheckUpLeft[0].position = {top: 1000, left: 1000};
 				this.areThereJumpsLeftForKING(pieceToCheck);					
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -619,7 +620,7 @@ class Board extends Component {
 				fullAdjoiningSquareCheckUpRight[0].position = {top: 1000, left: 1000};
 				this.areThereJumpsLeftForKING(pieceToCheck);
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -638,7 +639,7 @@ class Board extends Component {
 			piece.class = "piece playerOne king";
 			piece.king = true;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -650,7 +651,7 @@ class Board extends Component {
 			piece.class = "piece playerTwo king";
 			piece.king = true;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -740,7 +741,7 @@ class Board extends Component {
 			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -753,7 +754,7 @@ class Board extends Component {
 			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -766,7 +767,7 @@ class Board extends Component {
 			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -779,7 +780,7 @@ class Board extends Component {
 			this.state.playerOneTurn = false;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -866,7 +867,7 @@ class Board extends Component {
 			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -879,7 +880,7 @@ class Board extends Component {
 			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -892,7 +893,7 @@ class Board extends Component {
 			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -905,7 +906,7 @@ class Board extends Component {
 			this.state.playerOneTurn = true;
 			this.pieceSelected = false;
 			this.setState({});
-			socket.emit("set board", {
+			this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -1121,7 +1122,7 @@ class Board extends Component {
 				this.state.playerOneTurn = false;
 				this.pieceSelected = false;
 				this.setState({});
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -1133,7 +1134,7 @@ class Board extends Component {
 				this.state.playerOneTurn = true;
 				this.pieceSelected = false;
 				this.setState({});	
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -1149,7 +1150,7 @@ class Board extends Component {
 				this.state.playerOneTurn = false;
 				this.pieceSelected = false;
 				this.setState({});	
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
@@ -1161,7 +1162,7 @@ class Board extends Component {
 				this.state.playerOneTurn = true;
 				this.pieceSelected = false;
 				this.setState({});	
-				socket.emit("set board", {
+				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
