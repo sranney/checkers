@@ -16,6 +16,7 @@ import axios from "axios";
 
 //socket.io configuration stuff
 import io from "socket.io-client";
+
 const socketUrl = "http://localhost:5000";
 
 class NotFound extends React.Component {//component for 404
