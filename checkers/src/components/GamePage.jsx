@@ -88,9 +88,10 @@ class GamePlayPage extends Component {
         const currUsername = currEmail.substr(0,currEmail.indexOf("@"));
         return (
             <main>
-                <div className="right">
-                    <Button type="submit" id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home} style={{margin:"12px"}}>Home</Button>  
-                    <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>  
+                <div className="right"> 
+                    <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
+                    <br/>
+                    <Button type="submit" id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}>Home</Button> 
                 </div>
 
                 <Board

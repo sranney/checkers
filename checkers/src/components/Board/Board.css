@@ -1,55 +1,50 @@
 .fullGameBoard {
-    position: relative;
-    top: 50px;
-    left: 50%;
+    position: absolute;
+    top: 175px;
+    left: 33%;
 }
+
 .board {
-    
     float: left;
     /*position: relative;*/
-    
-    
-    height:386px;
-    width:386px;
-    
-    border-style:solid;
-    border-width:9px;
-    border-color:#DEB887;
+    height: 386px;
+    width: 386px;
+    border-style: solid;
+    border-width: 9px;
+    border-color: #DEB887;
 }
 
 div.square {
-    
-    float:left;
-    
-    position:relative;
-    
-    width:46px;
-    height:46px;
-    border-width:2px;
-    
-    
-    border-right-style:solid;
-    border-bottom-style:solid;
-    
-    border-color:#444;
+    float: left;
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-width: 2px;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-color: #444;
 }
+
 
 /* the bottom row */
+
 div.square:nth-last-child(-n + 8) {
-    border-bottom-style:none;
+    border-bottom-style: none;
 }
 
+
 /* the sides */
+
 div.square:nth-child(8n) {
-    border-right-style:none;
+    border-right-style: none;
 }
 
 div.square.light {
-    background-color:#ccc;
+    background-color: #ccc;
 }
 
 div.square.dark {
-    background-color:#333;
+    background-color: #333;
 }
 
 div.piece {
@@ -83,6 +78,6 @@ div.piece.playerTwo.king {
     height: 32px;
 }
 
-h1{
+h1 {
     color: white;
 }

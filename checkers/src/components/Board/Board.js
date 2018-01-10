@@ -1219,7 +1219,7 @@ class Board extends Component {
 							)}					
 					</div>
 				</div>
-			<div>
+			<div className="col-md-4">
 				{message}
 			</div>
 			</div>
