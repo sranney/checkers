@@ -41,37 +41,10 @@ server.listen(port);
 app.use(express.static('checkers/build'));
 // app.use(express.static('build'));
 app.get('*', (req, res) => {
-	console.log("******************************************************************************");
-	console.log("******************************************************************************");
-	console.log("******************************************************************************");
-	console.log("******************************************************************************");
-	console.log("******************************************************************************");
+	console.log(req);
 	res.sendFile(path.join(__dirname, '/index.html'))
 });
-app.get('/home', (req, res) => {
-	console.log("homehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehome");
-	console.log("homehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehome");
-	console.log("homehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehome");
-	console.log("homehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehome");
-	console.log("homehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehomehome");
-	res.sendFile(path.join(__dirname, '/index.html'))
-});
-app.get('/GamePage/:id', (req, res) => {
-	console.log("gamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegame");
-	console.log("gamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegame");
-	console.log("gamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegame");
-	console.log("gamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegame");
-	console.log("gamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegamegame");
-	res.sendFile(path.join(__dirname, '/index.html'))
-});
-app.get('/', (req, res) => {
-	console.log("rootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootroot");
-	console.log("rootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootroot");
-	console.log("rootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootroot");
-	console.log("rootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootroot");
-	console.log("rootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootrootroot");
-	res.sendFile(path.join(__dirname, '/index.html'))
-});
+
 if(process.env.NODE_ENV==='production'){
 	
 }
