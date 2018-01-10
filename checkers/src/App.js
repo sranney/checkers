@@ -16,7 +16,7 @@ import axios from "axios";
 
 //socket.io configuration stuff
 import io from "socket.io-client";
-const socketUrl = "http://localhost:5000";
+const socketUrl = "https://firebasereact.herokuapp.com";
 
 class NotFound extends React.Component {//component for 404
   render(){
