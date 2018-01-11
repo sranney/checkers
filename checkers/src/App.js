@@ -7,6 +7,7 @@ import { Router, Route, Switch, Redirect } from 'react-router';
 import LogIn from "./components/LogIn";
 import Home from "./components/Home";
 import GamePlayPage from "./components/GamePage";
+import NoVacancy from "./components/NoVacancy";
 
 //firebase for authentication
 import {auth} from "./firebase";
@@ -110,9 +111,18 @@ class App extends Component {
           render = {(routeProps) => (
             <GamePlayPage
               {...routeProps}
-              socket={this.state.socket}
+              socket = {this.state.socket}
               user = {this.state.user}
               logOut = {this.logOut}
+            />
+          )}
+        />
+        <Route 
+          exact path="/NoVacancy"
+          render = {(routerProps) => (
+            <NoVacancy
+              {...routerProps}
+              
             />
           )}
         />

@@ -34,7 +34,7 @@ class GamePlayPage extends Component {
                 axios.post("/checkVacancy",{room,username})
                     .then(res=>{
                         if(res.data==="room does not exist"||res.data==="no vacancy"){
-                            this.props.history.push("/home");
+                            this.props.history.push("/NoVacancy");
                             return;
                         } else if( res.data === "you have been added to this room as an opponent"){
                             this.gameConnect()
@@ -51,7 +51,7 @@ class GamePlayPage extends Component {
                         axios.post("/checkVacancy",{room,username})
                             .then(res=>{
                                 if(res.data==="room does not exist"||res.data==="no vacancy"){
-                                    this.props.history.push("/home");
+                                    this.props.history.push("/NoVacancy");
                                     return;
                                 } else if( res.data === "you have been added to this room as an opponent"){
                                     this.gameConnect()
