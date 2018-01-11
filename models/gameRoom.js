@@ -10,6 +10,18 @@ var grSchema = new Schema({
   opponent:{
     type:String,
     default:""
+  },
+  squares:{
+    type:Array,
+    default:[]
+  },
+  piecesOne:{
+    type:Array,
+    default:[]
+  },
+  piecesTwo:{
+    type:Array,
+    default:[]
   }
 });
 

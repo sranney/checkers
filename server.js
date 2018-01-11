@@ -294,27 +294,28 @@ const SocketManager = (socket) => {
 		console.log("typing sent to server");
 		const {currUsername,otherUsername,isTyping} = typingObj;
 		const socketListenerID = `${otherUsername}_${currUsername}`;		
-		const typingRes = isTyping ? currUsername : false;
+		const typingRes = isTyping ? currUsername : false;//false or the message created will say currUsername is typing
 		console.log(socketListenerID);
 		io.emit(`typing_home_${socketListenerID}`,typingRes);
 	})
 
-	socket.on("game connect",playerObj=>{
+	//for sending back information regarding whose playing a game
+	socket.on("game connect",playerObj=>{//whenever a player connects to a particular game page, message emitted from client
 		const {room,username} = playerObj;
-		gameRoomModel.find({room}).then(data=>{
-			let gamePlayers = "";
-			if(data[0].opponent===""){
-				if(room!==username){
-					gamePlayers = [room,username];
+		gameRoomModel.find({room}).then(data=>{//look up gameroom based on room, data is the returned room data
+			let gamePlayers = "";//this will be populated with the data that is returned to client
+			if(data[0].opponent===""){//does the room have an opponent yet?
+				if(room!==username){//if not, is the username of the client that sent this socket event to the server equal to the room name
+					gamePlayers = [room,username];//if it is, then this will be the opponent
 				}
 				else {
-					gamePlayers = [room,"no opponent yet"];
+					gamePlayers = [room,"no opponent yet"];//if it is the same as the room, then there is no opponent yet
 				}
 			}
-			else {
+			else {//if there is already an opponent than return the room with the opponent's name
 				gamePlayers = [room,data[0].opponent];
 			}
-			io.emit(`game_connect_${room}`,gamePlayers);
+			io.emit(`game_connect_${room}`,gamePlayers);//emit the formed gameplayers array back to user in the same room that emitted the msg to the server
 		})		
 	})
 

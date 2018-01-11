@@ -1181,12 +1181,12 @@ class Board extends Component {
 	render() {
 		const playerTurn = this.state.playerOneTurn;
 		let message = null;
-
+		const {room,currUser,gamePlayers} = this.props;
 		if(playerTurn){
-			message = <h1>Your Turn</h1>
+			message = <h1>{`${room}'s Turn`}</h1>
 		}
 		else{
-			message = <h1>Opponent's Turn</h1>
+			message = <h1>{`${gamePlayers[1]}'s Turn`}</h1>
 		}
 		return (
 			<div>
@@ -1205,7 +1205,7 @@ class Board extends Component {
 								key={piece.id}
 								className={piece.class}
 								style={piece.position}
-								onClick={() => {this.findMovesOne(piece.id)}}
+								onClick={() => {currUser === room ? this.findMovesOne(piece.id):null}}
 								>
 							</div>
 							)}
@@ -1214,7 +1214,7 @@ class Board extends Component {
 								key={piece.id}
 								className={piece.class}
 								style={piece.position}
-								onClick={() => this.findMovesTwo(piece.id)}
+								onClick={() => {currUser === gamePlayers[1] ? this.findMovesTwo(piece.id):null}}
 								>
 							</div>
 							)}					

@@ -22,7 +22,8 @@ class GamePlayPage extends Component {
         }
     }
 
-    componentDidUpdate(){
+    componentWillMount(){
+        console.log("component will mount called");
         const room = this.props.match.params.id;
         if(this.props.user){        
             const email = this.props.user.email;
@@ -39,7 +40,7 @@ class GamePlayPage extends Component {
                             this.gameConnect()
                         }
                     });
-        } else {
+        } else {//for just in case the user is not quite logged in yet, this will try again 1 second after the first attempt. if at that time, the user is still not logged in, re-route to home
             setTimeout(()=>{
                 if(this.props.user){
                     const email = this.props.user.email;
@@ -66,15 +67,17 @@ class GamePlayPage extends Component {
     componentDidMount () {
         const room = this.props.match.params.id;
         const socket = this.props.socket;
+        //message returned from server in response to emitted message in function gameConnect
+        //sets the gameplayers on the client
         socket.on(`game_connect_${room}`,gamePlayers=>this.setState({gamePlayers}));
-        if(this.props.user){this.gameConnect()}
+        if(this.props.user){this.gameConnect()}//if the user is logged in then run gameConnect to emit the message to check for users
     }
 
     home = () => {
         this.props.history.push("/home");
     }
 
-    gameConnect = () => {
+    gameConnect = () => {//determine whether a user can connect to a room
         const room = this.props.match.params.id;
         const socket = this.props.socket;
         const email = this.props.user.email;
@@ -83,9 +86,11 @@ class GamePlayPage extends Component {
     }
 
     renderPage = () => {
+        const {gamePlayers} = this.state;
         const {socket,user} = this.props;
         const currEmail = this.props.user.email;
         const currUsername = currEmail.substr(0,currEmail.indexOf("@"));
+        const room = this.props.match.params.id;       
         return (
             <main>
                 <div className="right"> 
@@ -96,6 +101,9 @@ class GamePlayPage extends Component {
 
                 <Board
                     socket={socket}
+                    room={room}
+                    currUser={currUsername}
+                    gamePlayers={gamePlayers}
                 />
 
                 <SideNav

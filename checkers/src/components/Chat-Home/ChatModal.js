@@ -50,12 +50,10 @@ export default class ChatModal extends React.Component {
             this.setState({msgs});
         })
         socket.on(`typing_home_${socketListenerID}`,(typingRes)=>{
-            console.log("other person typing");
-            console.log(typingRes);
             if(typingRes===false){
                 this.setState({typingMessage:null})
-            } else if(typingRes!==currUsername){
-                this.setState({typingMessage:`${otherUsername} is typing`})
+            } else if(typingRes!==currUsername){//not the current user's name
+                this.setState({typingMessage:`${typingRes} is typing`})//joe schmo is typing
             }
         })
         const ChatPull = axios.post("/chats-home",{currUsername,otherUsername});
