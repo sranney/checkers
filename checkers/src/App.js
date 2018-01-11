@@ -20,7 +20,7 @@ const socketUrl = "http://localhost:5000";
 
 class NotFound extends React.Component {//component for 404
   render(){
-    return (<div>Not Found</div>);
+    return (<div>No Page Here</div>);
   }
  }
 
@@ -116,6 +116,7 @@ class App extends Component {
             />
           )}
         />
+        <Route component = {NotFound} />
       </Switch>
     </div>
     )
