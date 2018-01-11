@@ -70,6 +70,10 @@ h2,
     margin: 12px;
 }
 
+#homeBtn {
+    width: 76%;
+}
+
 a,
 a:hover {
     color: orange;
@@ -86,10 +90,6 @@ textarea {
 
 .card .card-reveal {
     height: 101%;
-}
-
-.side-nav {
-    text-transform: capitalize;
 }
 
 #friendEmail :focus {

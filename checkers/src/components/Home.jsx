@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 
 //materialize
 import {Button, Modal, SideNavItem, SideNav, Card, CardTitle, Input, Footer, Toast} from 'react-materialize';
-import 'materialize-css';
+// import 'materialize-css';
 
 //axios http handler
 import axios from "axios";
@@ -68,8 +68,8 @@ this.props.user?
     <Card className='small'
 	    header={<CardTitle id="h2h" image='http://www.cityrider.com/fixed/43aspect.png' >
         <span class="orange-text text-lighten-1"><h2>Head to Head</h2></span></CardTitle>}
-
-	    actions={[<SideNav
+>
+	    <SideNav className="side-nav"
                     trigger={<Button className = "btn light-green waves-effect waves-light z-depth-2">Choose your opponent</Button>}
                     options={{ closeOnClick: true }}>
                     <SideNavItem userView
@@ -109,8 +109,7 @@ this.props.user?
                         }
                     )
                     }
-                </SideNav>]}>
-        <p>Challenge an opponent by clicking here!</p>
+                </SideNav>
     </Card>
     <br/>
 
