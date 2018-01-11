@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import './Board.css';
-import squares from './square.json';
-import piecesOne from './piecesOne.json';
-import piecesTwo from './piecesTwo.json';
+// import squares from './square.json';
+// import piecesOne from './piecesOne.json';
+// import piecesTwo from './piecesTwo.json';
+import axios from 'axios';
 // import openSocket from 'socket.io-client';
 // const socket = openSocket('http://localhost:5000');
 
@@ -11,21 +12,31 @@ class Board extends Component {
 	constructor(props) {
 		super(props) 
 			this.state = {
-				squares,
-				piecesOne,
-				piecesTwo,
+				squares: [],
+				piecesOne: [],
+				piecesTwo: [],
 				playerOneTurn: true
 			}
 			this.socket = this.props.socket;
 			this.squareToMoveTo = "";
 			this.pieceToMove = "";
 			this.pieceSelected = false;
+			this.gameRoom = "";
 	}
 
 	componentDidMount = () => {
-		this.socket.on("board settings", data => {
-			this.setState(data);
-		})
+		const location = window.location.href;
+		const splitLocation = location.split("/");
+		this.gameRoom = splitLocation[splitLocation.length - 1];
+		axios.post("/gameSettings", this.gameRoom)
+			.then(res =>{
+				this.setState({
+					squares: res.data[0].squares,
+					piecesOne: res.data[0].piecesOne,
+					piecesTwo: res.data[0].piecesTwo,
+					playerOneTurn: res.data[0].playerOneTurn
+				});
+			});
 	}
 
 	//this is implemented on the playerOne "onClick" function in return/render statement
@@ -109,9 +120,9 @@ class Board extends Component {
 				piecesOne: this.state.piecesOne,
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
-				pieceSelected: this.pieceSelected
+				pieceSelected: this.pieceSelected,
+				gameRoom: this.gameRoom
 			});
-
 		}
 	}	
 
@@ -227,7 +238,8 @@ class Board extends Component {
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
 				});
 			}
 		}			
@@ -272,7 +284,8 @@ class Board extends Component {
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
 				});
 			}
 		}
@@ -332,14 +345,15 @@ class Board extends Component {
 				if(pieceToCheck.position.top === 8){
 					this.makeKing(pieceToCheck);
 				}				
-				this.areThereJumpsLeftForPlayerTwo(pieceToCheck);	
+				// this.areThereJumpsLeftForPlayerTwo(pieceToCheck);	
 				this.setState({});
 				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
 				});
 				
 			}
@@ -373,14 +387,15 @@ class Board extends Component {
 				if(pieceToCheck.position.top === 8){
 					this.makeKing(pieceToCheck);
 				}
-				this.areThereJumpsLeftForPlayerTwo(pieceToCheck);
+				// this.areThereJumpsLeftForPlayerTwo(pieceToCheck);
 				this.setState({});
 				this.socket.emit("set board", {
 					squares: this.state.squares,
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
 				});
 				
 			}			
