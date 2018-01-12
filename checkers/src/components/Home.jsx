@@ -72,7 +72,7 @@ this.props.user?
             Logout
         </Button>       
         <Button 
-            id="logOutBtn" 
+            id="gameBtn" 
             className = "btn orange lighten-1 waves-effect waves-light z-depth-5" 
             onClick={this.gameNav}>
             Game Page

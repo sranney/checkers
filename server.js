@@ -262,9 +262,10 @@ const SocketManager = (socket) => {
 
 	socket.on("chat-game",(msgObj)=>{
 		const {location,sender,to,message} = msgObj;
+		console.log(location);
 		const dataObj = {
 			sender,
-			room:`${sender}-game`,
+			room:`${location}-game`,
 			otherUser:to,
 			message
 		}
@@ -320,7 +321,7 @@ const SocketManager = (socket) => {
 
 	socket.on("get start", room=>{
 		getGamePieces(room).then(data=>{
-			io.emit("start board", data[0]);
+			io.emit(`start board - ${room}`, data[0]);
 		})
 	})
 

@@ -63,15 +63,20 @@ h2,
     margin-right: 10px;
 }
 
-#logOutBtn,
-#homeBtn,
-#gameChatBtn {
-    float: right;
-    margin: 12px;
+#nav{
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
 }
 
-#homeBtn {
-    width: 76%;
+#logOutBtn,
+#homeBtn,
+#gameBtn,
+#gameChatBtn,
+#expelBtn,
+#leaveBtn {
+    float:right;
+    margin: 12px;
 }
 
 a,

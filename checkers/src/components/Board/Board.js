@@ -4,6 +4,7 @@ import './Board.css';
 // import piecesOne from './piecesOne.json';
 // import piecesTwo from './piecesTwo.json';
 import axios from 'axios';
+import { join } from 'path';
 // import openSocket from 'socket.io-client';
 // const socket = openSocket('http://localhost:5000');
 
@@ -25,11 +26,9 @@ class Board extends Component {
 	}
 
 	componentDidMount = () => {
-		const location = window.location.href;
-		const splitLocation = location.split("/");
-		this.gameRoom = splitLocation[splitLocation.length - 1];
+		this.gameRoom = this.props.room
 		this.socket.emit("get start", this.gameRoom);
-		this.socket.on("start board", data => {
+		this.socket.on(`start board - ${this.gameRoom}`, data => {
 			this.setState({
 				squares: data.squares,
 				piecesOne: data.piecesOne,

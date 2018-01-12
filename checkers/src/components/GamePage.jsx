@@ -115,7 +115,7 @@ class GamePlayPage extends Component {
 
     renderExpelButton = () => {
         return (
-            <Button type="submit" id="expelBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.expelOpponent}>Expel Opponent</Button>             
+            <Button id="expelBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.expelOpponent}>Expel Opponent</Button>             
         )
     }
 
@@ -136,7 +136,7 @@ class GamePlayPage extends Component {
 
     renderLeaveButton = () => {
         return (
-            <Button type="submit" id="leaveBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.leaveGame}>Leave Game</Button>             
+            <Button id="leaveBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.leaveGame}>Leave Game</Button>             
         )
     }
 
@@ -160,21 +160,11 @@ class GamePlayPage extends Component {
         const room = this.props.match.params.id;       
         return (
             <main>
-                <div className="right"> 
-                    <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
-                    <br/>
-                    <Button type="submit" id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}> Home </Button> 
+                <div id="nav" className="right"> 
+                    <Button id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
+                    <Button id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}> Home </Button> 
                     {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}                
-                </div>
-
-                <Board
-                    socket={socket}
-                    room={room}
-                    currUser={currUsername}
-                    gamePlayers={gamePlayers}
-                />
-
-                <SideNav
+                    <SideNav
                     trigger={ <a  id="gameChatBtn"  className="btn-floating btn-large waves-effect waves-light orange lighten-1"><i className="material-icons">chat_bubble_outline</i></a>}
                     options={{ closeOnClick: true }}>
                     <SideNavItem userView
@@ -208,6 +198,16 @@ class GamePlayPage extends Component {
                         })
                     }
                 </SideNav>
+                </div>
+
+                <Board
+                    socket={socket}
+                    room={room}
+                    currUser={currUsername}
+                    gamePlayers={gamePlayers}
+                />
+
+
                 
                 <Footer id = "LogInFooter" copyrights="&copy 2017 SuperGroup"
                     className="light-green"
