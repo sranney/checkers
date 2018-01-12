@@ -19,6 +19,11 @@ var userModel = require("./models/users.js");
 var chatModel = require("./models/chat.js");
 var gameRoomModel = require("./models/gameRoom.js");
 
+//starter seed files for game functionality
+var piecesOne = require("./piecesOne.json");
+var piecesTwo = require("./piecesTwo.json")
+var squares = require("./square.json")
+
 //body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -61,7 +66,12 @@ app.post("/login",function(req,res){
 		data.length===0?
 			userModel.create(UserData).then(res => {
 				const room = UserData.username;
-				gameRoomModel.create({room}).then(res => {})
+				gameRoomModel.create({
+					room: room,
+					squares: squares,
+					piecesOne: piecesOne,
+					piecesTwo: piecesTwo
+				}).then(res => {})
 			})
 		:
 			null;
@@ -144,6 +154,16 @@ app.post("/chats-game",(req,res)=>{
 	});
 })
 
+//===================++++++++Game Function Code+++++++++=============================
+app.post("/gameSettings", (req, res)=>{
+	const room = Object.keys(req.body);
+	const gameRoom = room[0];
+	getGamePieces(gameRoom).then(data=>{
+		res.json(data);
+	})
+	console.log(gameRoom);
+});
+
 app.get('*', (req, res) => {
 	console.log(req);
 	res.sendFile(path.join(__dirname, '/index.html'))
@@ -187,16 +207,6 @@ const SocketManager = (socket) => {
 			return {username:user.username,email:user.email};
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
-		//updating user's document in mongodb to reflect that the user is online
-		// loginUser( email,socket ).then( res => {
-		// 	//getting list of online users from mongodb
-		// 	onlineUsers( ).then( res2 => {
-		// 		//emitting back to client the list of online users
-		// 		io.emit( "user connected" , res2 );
-			
-		// 	})
-
-		// })
 	})
 
 	socket.on("disconnect", () => {
@@ -208,18 +218,6 @@ const SocketManager = (socket) => {
 			return {username:user.username,email:user.email};
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
-		// const email = user.email;
-		// //updates the user's mongodb document to reflect that the user is now offline
-		
-		// logoutUser(email).then(res=>{
-		// 	//gets current list of online users from mongodb and sends to client
-		// 	onlineUsers().then(res2=>{
-		
-		// 		io.emit("user connected",res2);
-		
-		// 	})
-		
-		// })
 
 	})
 
@@ -234,16 +232,7 @@ const SocketManager = (socket) => {
 			return {username,email};
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
-		//updates the user's mongodb document to reflect that the user is now offline
-		// logoutUser(email).then(res=>{
-		// 	//gets current list of online users from mongodb and sends to client
-		// 	onlineUsers().then(res2=>{
-		
-		// 		io.emit("user connected",res2);
-		
-		// 	})
-		
-		// })
+
 
 	})
 
@@ -335,8 +324,17 @@ const SocketManager = (socket) => {
 		})
 	})
 
+	socket.on("get start", room=>{
+		getGamePieces(room).then(data=>{
+			io.emit("start board", data[0]);
+		})
+	})
+
 	socket.on("set board", board => {
-		io.emit("board settings", board);
+		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn)
+			.then(data => {
+				io.emit("board settings", data);
+			});
 	})
 
 }
@@ -360,6 +358,20 @@ function logoutUser (email){
 function findUserBySocket(socket){
 	return userModel.find({socket:socket})
 }
+
+//++++++=================+++ GAME PLAY FUNCTIONS ++++=============
+function getGamePieces(roomOwner){
+	return gameRoomModel.find({room:roomOwner});
+}
+
+function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn){
+	return gameRoomModel.update({"room":room},{ $set: {
+		piecesOne: piecesOne,
+		piecesTwo: piecesTwo,
+		playerOneTurn: playerOneTurn
+	}})
+}
+
 //sets up the SocketManager function for the socket that has been picked up
 io.on("connection",SocketManager);
 
