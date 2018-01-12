@@ -43,9 +43,7 @@ class GamePlayPage extends Component {
         //sets the gameplayers on the client
         socket.on(`game_connect_${room}`,gamePlayers=>this.setState({gamePlayers}));
         socket.on(`leave_${room}`,gameObj=>{
-            console.log("?#?#?###?##*#?#*#?##*#*#$&#*$&*#&#$#?#?$?#$I#$#>>>>>>#>#>#>#>#>#>$K#$$#K$#JK$#J$#");
             this.gameConnect();
-            console.log(`${gameObj.opponent} left the game`);
         })
         if(this.props.user){
             this.gameConnect();
@@ -165,9 +163,8 @@ class GamePlayPage extends Component {
                 <div className="right"> 
                     <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
                     <br/>
-                    <Button type="submit" id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}>Home</Button> 
-                    <br/>
-                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}
+                    <Button type="submit" id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}> Home </Button> 
+                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}                
                 </div>
 
                 <Board

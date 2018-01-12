@@ -124,6 +124,7 @@ class App extends Component {
           render = {(routerProps) => (
             <NoVacancy
               {...routerProps}
+              
             />
           )}
         />
@@ -142,7 +143,7 @@ class App extends Component {
               {...routerProps}
             />
           )}
-        />
+        />        
         <Route component = {NotFound} />
       </Switch>
     </div>

@@ -70,6 +70,10 @@ h2,
     margin: 12px;
 }
 
+#homeBtn {
+    width: 76%;
+}
+
 a,
 a:hover {
     color: orange;
@@ -88,13 +92,10 @@ textarea {
     height: 101%;
 }
 
-.side-nav {
-    text-transform: capitalize;
-}
 
-#friendEmail :focus {
+/* #friendEmail :focus {
     color: #91c74c;
-}
+} */
 
 
 /* .input-field input[type=date]:focus+label,
