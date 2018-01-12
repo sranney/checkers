@@ -168,7 +168,6 @@ app.post("/gameSettings", (req, res)=>{
 
 
 app.get('*', (req, res) => {
-	console.log(req);
 	res.sendFile(path.join(__dirname, '/index.html'))
 });
 
@@ -179,7 +178,7 @@ if(process.env.NODE_ENV==='production'){
 
 
 
-
+//array that will be used to store users that are online and be sent to the browser
 let onlineUsersArr = [];
 let trueDisconnect = true;
 
@@ -195,9 +194,6 @@ const SocketManager = (socket) => {
 		onlineUsers_currUser = onlineUsersArr.filter(user=>{//
 			return user.email === email;
 		})
-		console.log("***************************************")
-		console.log(onlineUsers_currUser);
-		console.log("***************************************")
 		if(onlineUsers_currUser.length === 0 ){ 
 			onlineUsersArr.push(userObjForOnlineUsers)
 		} else {
@@ -300,9 +296,7 @@ const SocketManager = (socket) => {
 	})
 
 	socket.on("chat-game",(msgObj)=>{
-		console.log("socket - chat-game - received");
 		const {location,sender,to,message} = msgObj;
-		console.log(location);
 		const dataObj = {
 			sender,
 			room:`${sender}-game`,
@@ -343,6 +337,23 @@ const SocketManager = (socket) => {
 			}
 			io.emit(`game_connect_${room}`,gamePlayers);//emit the formed gameplayers array back to user in the same room that emitted the msg to the server
 		})		
+	})
+
+	socket.on("expel from game",gameObj=>{//NEED TO UPDATE THE GAME PIECES HERE TOO
+		const {room,opponent} = gameObj;
+		gameRoomModel.update({"room":room},{$set:{"opponent":""}}).then(data => {
+			io.emit(`expel_${room}_${opponent}`,{});
+		})
+	})
+
+	socket.on("leave game",gameObj=>{
+		const {room,opponent} = gameObj;
+		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
+		console.log(room);
+		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
+		gameRoomModel.update({"room":room},{$set:{"opponent":""}}).then(data => {
+			io.emit(`leave_${room}`,{opponent});
+		})
 	})
 
 	socket.on("get start", room=>{
@@ -394,7 +405,7 @@ function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn){
 }
 
 
-//sets up the SocketManager function for the socket that has been picked up
+//sets up the SocketManager function for the socket that has been connected
 io.on("connection",SocketManager);
 
 
