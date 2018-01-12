@@ -11,9 +11,8 @@ var mongoose = require("mongoose");
 var nodemailer = require("nodemailer");
 // using SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
-// const sendgridkey = require("../../../secrets/sendGridKey")
-// const sgMail = require('@sendgrid/mail');
-// sgMail.setApiKey(sendgridkey);
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 //mongoose models
 var userModel = require("./models/users.js");
