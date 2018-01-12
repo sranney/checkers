@@ -66,12 +66,23 @@ this.props.user?
     <div className="container">
         <div className="jumbotron text-center"></div>
     <Card className='small'
-	    header={<CardTitle id="h2h" image='http://www.cityrider.com/fixed/43aspect.png' >
-        <span class="orange-text text-lighten-1"><h2>Head to Head</h2></span></CardTitle>}
+        reveal={<h4>Welcome to Check-Your-Checkers. Most rules are the same as your typical game of checkers played with a friend but there are a few important notes to make you aware of before starting. 
+            <br />
+            <br />
+            First, the owner of the room in which you are playing will be the red pieces and will start the game with their movement. 
+            To start your movement simply click on the piece you want to move and then click on the square you wish to move it to. 
+            If the piece you click on has a jump possible it will make the jump for you and your turn will continue until all possible jumps and/or moves have been complete.
+            <br />
+            <br />
+            Also feel free to chat with your opponent using the chat icon in the top right-hand corner or the screen.
+            Have a great time playing Check-Your-Checkers!</h4>}
+	    header={<CardTitle id="h2h" reveal image='http://www.cityrider.com/fixed/43aspect.png' >
+        <span class="orange-text text-lighten-1"><h2>Head to Head</h2></span><nh/><h4>Click Here To Learn How To Play</h4></CardTitle>}
 >
 	    <SideNav className="side-nav"
                     trigger={<Button className = "btn light-green waves-effect waves-light z-depth-2">Choose your opponent</Button>}
                     options={{ closeOnClick: true }}>
+                    <p>Click above for How to Play</p>
                     <SideNavItem userView
 		                user={{
                             background:'https://i.stack.imgur.com/rJzOY.jpg',
@@ -112,7 +123,6 @@ this.props.user?
                 </SideNav>
     </Card>
     <br/>
-
     <Card className="small"
         header={<CardTitle reveal image={"http://www.cityrider.com/fixed/43aspect.png"} waves='light'/>}
 		title={<span class="orange-text text-lighten-1">Invite a Friend</span>}

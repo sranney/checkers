@@ -92,9 +92,10 @@ textarea {
     height: 101%;
 }
 
-#friendEmail :focus {
+
+/* #friendEmail :focus {
     color: #91c74c;
-}
+} */
 
 
 /* .input-field input[type=date]:focus+label,
