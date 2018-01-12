@@ -22,6 +22,7 @@ export default class ChatModal extends React.Component {
         this.sendTyping = this.sendTyping.bind(this);
         this.startCheckingTyping = this.startCheckingTyping.bind(this);
         this.stopCheckingTyping = this.stopCheckingTyping.bind(this);   
+        this.scrollToBottom = this.scrollToBottom.bind(this);
 
         const {currUser,user,socket,location} = this.props;
         const currUserEmail = currUser.email;
@@ -62,6 +63,10 @@ export default class ChatModal extends React.Component {
             const msgs = res.data;
             this.setState({msgs});
         })
+        this.scrollToBottom();
+    }
+    componentDidUpdate(){
+        this.scrollToBottom();
     }
     Send = (e) => {
         e.preventDefault();
@@ -124,6 +129,13 @@ export default class ChatModal extends React.Component {
 			this.sendTyping(false)
 		}
     }   
+
+    scrollToBottom(){
+        const {gameChatBox} = this.refs;
+        if(this.refs.gameChatBox){    
+            gameChatBox.scrollTop = gameChatBox.scrollHeight
+        }
+    }
       
     render() {
 
@@ -134,7 +146,7 @@ export default class ChatModal extends React.Component {
                 header = {<h2>{`Your conversation with ${otherUsername}`}</h2>}
                 trigger={<Button className = " btn light-green waves-effect waves-light" id="chat" icon='chat_bubble_outline'></Button>}>
                 <div>
-                    <div className="card-panel grey darken-3 chatBox">
+                    <div ref="gameChatBox" className="card-panel grey darken-3 chatBox">
                         {
                             this.state.msgs.map((msg,indx)=>{
                                 return(
