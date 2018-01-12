@@ -11,9 +11,8 @@ var mongoose = require("mongoose");
 var nodemailer = require("nodemailer");
 // using SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
-// const sendgridkey = require("../../../secrets/sendGridKey")
-// const sgMail = require('@sendgrid/mail');
-// sgMail.setApiKey(sendgridkey);
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 //mongoose models
 var userModel = require("./models/users.js");
@@ -210,16 +209,6 @@ const SocketManager = (socket) => {
 			return {username:user.username,email:user.email};
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
-		//updating user's document in mongodb to reflect that the user is online
-		// loginUser( email,socket ).then( res => {
-		// 	//getting list of online users from mongodb
-		// 	onlineUsers( ).then( res2 => {
-		// 		//emitting back to client the list of online users
-		// 		io.emit( "user connected" , res2 );
-			
-		// 	})
-
-		// })
 	})
 
 	socket.on("disconnect", () => {
@@ -231,18 +220,6 @@ const SocketManager = (socket) => {
 			return {username:user.username,email:user.email};
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
-		// const email = user.email;
-		// //updates the user's mongodb document to reflect that the user is now offline
-		
-		// logoutUser(email).then(res=>{
-		// 	//gets current list of online users from mongodb and sends to client
-		// 	onlineUsers().then(res2=>{
-		
-		// 		io.emit("user connected",res2);
-		
-		// 	})
-		
-		// })
 
 	})
 
@@ -257,16 +234,6 @@ const SocketManager = (socket) => {
 			return {username,email};
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
-		//updates the user's mongodb document to reflect that the user is now offline
-		// logoutUser(email).then(res=>{
-		// 	//gets current list of online users from mongodb and sends to client
-		// 	onlineUsers().then(res2=>{
-		
-		// 		io.emit("user connected",res2);
-		
-		// 	})
-		
-		// })
 
 	})
 
@@ -348,9 +315,6 @@ const SocketManager = (socket) => {
 
 	socket.on("leave game",gameObj=>{
 		const {room,opponent} = gameObj;
-		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
-		console.log(room);
-		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
 		gameRoomModel.update({"room":room},{$set:{"opponent":""}}).then(data => {
 			io.emit(`leave_${room}`,{opponent});
 		})

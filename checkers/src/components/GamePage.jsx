@@ -166,6 +166,7 @@ class GamePlayPage extends Component {
                     <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
                     <br/>
                     <Button type="submit" id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}> Home </Button> 
+                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}                
                 </div>
 
                 <Board
