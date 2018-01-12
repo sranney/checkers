@@ -28,15 +28,15 @@ class Board extends Component {
 		const location = window.location.href;
 		const splitLocation = location.split("/");
 		this.gameRoom = splitLocation[splitLocation.length - 1];
-		axios.post("/gameSettings", this.gameRoom)
-			.then(res =>{
-				this.setState({
-					squares: res.data[0].squares,
-					piecesOne: res.data[0].piecesOne,
-					piecesTwo: res.data[0].piecesTwo,
-					playerOneTurn: res.data[0].playerOneTurn
-				});
+		this.socket.emit("get start", this.gameRoom);
+		this.socket.on("start board", data => {
+			this.setState({
+				squares: data.squares,
+				piecesOne: data.piecesOne,
+				piecesTwo: data.piecesTwo,
+				playerOneTurn: data.playerOneTurn
 			});
+		})
 	}
 
 	//this is implemented on the playerOne "onClick" function in return/render statement
@@ -123,6 +123,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 	}	
 
@@ -241,6 +242,7 @@ class Board extends Component {
 					pieceSelected: this.pieceSelected,
 					gameRoom: this.gameRoom
 				});
+				this.socket.emit("get start", this.gameRoom);
 			}
 		}			
 		//if there is a piece down and to the right the openSquareToJump should be the square 'behind' that piece
@@ -287,6 +289,7 @@ class Board extends Component {
 					pieceSelected: this.pieceSelected,
 					gameRoom: this.gameRoom
 				});
+				this.socket.emit("get start", this.gameRoom);
 			}
 		}
 
@@ -355,6 +358,7 @@ class Board extends Component {
 					pieceSelected: this.pieceSelected,
 					gameRoom: this.gameRoom
 				});
+				this.socket.emit("get start", this.gameRoom);
 				
 			}
 		}			
@@ -397,6 +401,7 @@ class Board extends Component {
 					pieceSelected: this.pieceSelected,
 					gameRoom: this.gameRoom
 				});
+				this.socket.emit("get start", this.gameRoom);
 				
 			}			
 		}
@@ -516,6 +521,7 @@ class Board extends Component {
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected
 				});
+				this.socket.emit("get start", this.gameRoom);
 			}
 		}			
 
@@ -558,6 +564,7 @@ class Board extends Component {
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected
 				});
+				this.socket.emit("get start", this.gameRoom);
 			}
 		}			
 
@@ -600,6 +607,7 @@ class Board extends Component {
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected
 				});
+				this.socket.emit("get start", this.gameRoom);
 				
 			}
 		}			
@@ -642,6 +650,7 @@ class Board extends Component {
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected
 				});
+				this.socket.emit("get start", this.gameRoom);
 				
 			}			
 		}
@@ -655,24 +664,26 @@ class Board extends Component {
 			piece.king = true;
 			this.setState({});
 			this.socket.emit("set board", {
-					squares: this.state.squares,
-					piecesOne: this.state.piecesOne,
-					piecesTwo: this.state.piecesTwo,
-					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
-				});
+				squares: this.state.squares,
+				piecesOne: this.state.piecesOne,
+				piecesTwo: this.state.piecesTwo,
+				playerOneTurn: this.state.playerOneTurn,
+				pieceSelected: this.pieceSelected
+			});
+			this.socket.emit("get start", this.gameRoom);
 		}	
 		if(piece.player === 2){
 			piece.class = "piece playerTwo king";
 			piece.king = true;
 			this.setState({});
 			this.socket.emit("set board", {
-					squares: this.state.squares,
-					piecesOne: this.state.piecesOne,
-					piecesTwo: this.state.piecesTwo,
-					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
-				});
+				squares: this.state.squares,
+				piecesOne: this.state.piecesOne,
+				piecesTwo: this.state.piecesTwo,
+				playerOneTurn: this.state.playerOneTurn,
+				pieceSelected: this.pieceSelected
+			});
+			this.socket.emit("get start", this.gameRoom);
 		}	
 
 	}
@@ -764,6 +775,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 
 		if(playerTwoDL === 1 && anyPieceOutsideDL === 1 && playerTwoDR === 0){
@@ -778,6 +790,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 
 		if(playerTwoDR === 1 && anyPieceOutsideDR === 1 && playerTwoDL === 0){
@@ -792,6 +805,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 
 		if(playerTwoDL === 1 && playerTwoDR === 1 && anyPieceOutsideDR === 1 && anyPieceOutsideDL === 1){
@@ -806,6 +820,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 	
 	}
@@ -894,6 +909,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 
 		if(playerOneUL === 1 && anyPieceOutsideUL === 1 && playerOneUR === 0){
@@ -908,6 +924,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 
 		if(playerOneUR === 1 && anyPieceOutsideUR === 1 && playerOneUL === 0){
@@ -922,6 +939,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 
 		if(playerOneUL === 1 && playerOneUR === 1 && anyPieceOutsideUR === 1 && anyPieceOutsideUL === 1){
@@ -936,6 +954,7 @@ class Board extends Component {
 				pieceSelected: this.pieceSelected,
 				gameRoom: this.gameRoom
 			});
+			this.socket.emit("get start", this.gameRoom);
 		}
 	}
 
@@ -1150,8 +1169,10 @@ class Board extends Component {
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
-				});				
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
+				});
+				this.socket.emit("get start", this.gameRoom);			
 			}
 			if(piece.player === 2){
 				this.state.playerOneTurn = true;
@@ -1162,8 +1183,10 @@ class Board extends Component {
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
-				});			
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
+				});
+				this.socket.emit("get start", this.gameRoom);			
 			}			
 
 		}
@@ -1178,8 +1201,10 @@ class Board extends Component {
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
-				});			
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
+				});
+				this.socket.emit("get start", this.gameRoom);			
 			}
 			if(piece.player === 2){
 				this.state.playerOneTurn = true;
@@ -1190,8 +1215,10 @@ class Board extends Component {
 					piecesOne: this.state.piecesOne,
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
-					pieceSelected: this.pieceSelected
-				});			
+					pieceSelected: this.pieceSelected,
+					gameRoom: this.gameRoom
+				});
+				this.socket.emit("get start", this.gameRoom);		
 			}	
 		}
 
