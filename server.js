@@ -345,6 +345,11 @@ const SocketManager = (socket) => {
 		})		
 	})
 
+	socket.on("get start", room=>{
+		getGamePieces(room).then(data=>{
+			io.emit("start board", data[0]);
+		})
+	})
 
 	socket.on("set board", board => {
 		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn)
