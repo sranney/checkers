@@ -43,9 +43,7 @@ class GamePlayPage extends Component {
         //sets the gameplayers on the client
         socket.on(`game_connect_${room}`,gamePlayers=>this.setState({gamePlayers}));
         socket.on(`leave_${room}`,gameObj=>{
-            console.log("?#?#?###?##*#?#*#?##*#*#$&#*$&*#&#$#?#?$?#$I#$#>>>>>>#>#>#>#>#>#>$K#$$#K$#JK$#J$#");
             this.gameConnect();
-            console.log(`${gameObj.opponent} left the game`);
         })
         if(this.props.user){
             this.gameConnect();
