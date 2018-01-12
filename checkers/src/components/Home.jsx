@@ -18,6 +18,7 @@ class Home extends React.Component {
     constructor(props){
         super(props);
         this.sendInvite = this.sendInvite.bind(this);
+        this.gameNav = this.gameNav.bind(this);
         this.personalizedLink = "";
     }
 
@@ -42,6 +43,13 @@ class Home extends React.Component {
             })
     }
 
+    gameNav = () => {
+        const email=this.props.user.email;
+        const personalizedgameid = email? `/GamePage/${email.substr(0,email.indexOf("@"))}` : null;
+        
+        this.props.history.push(personalizedgameid);
+    }
+
     render(){
         let email=null;
         let name=null;
@@ -56,13 +64,20 @@ class Home extends React.Component {
 this.props.user?
 
 <main>  
-    <Button 
-        type="submit" 
-        id="logOutBtn" 
-        className = "btn orange lighten-1 waves-effect waves-light z-depth-5" 
-        onClick={this.props.logOut}>
-        Logout
-    </Button>       
+    <div>
+        <Button  
+            id="logOutBtn" 
+            className = "btn orange lighten-1 waves-effect waves-light z-depth-5" 
+            onClick={this.props.logOut}>
+            Logout
+        </Button>       
+        <Button 
+            id="logOutBtn" 
+            className = "btn orange lighten-1 waves-effect waves-light z-depth-5" 
+            onClick={this.gameNav}>
+            Game Page
+        </Button>       
+    </div>
     <div className="container">
         <div className="jumbotron text-center"></div>
     <Card className='small'
@@ -78,11 +93,11 @@ this.props.user?
             Have a great time playing Check-Your-Checkers!</h4>}
 	    header={<CardTitle id="h2h" reveal image='http://www.cityrider.com/fixed/43aspect.png' >
         <span class="orange-text text-lighten-1"><h2>Head to Head</h2></span><nh/><h4>Click Here To Learn How To Play</h4></CardTitle>}
->
+    >   
 	    <SideNav className="side-nav"
                     trigger={<Button className = "btn light-green waves-effect waves-light z-depth-2">Choose your opponent</Button>}
                     options={{ closeOnClick: true }}>
-                    <p>Click above for How to Play</p>
+                    
                     <SideNavItem userView
 		                user={{
                             background:'https://i.stack.imgur.com/rJzOY.jpg',
@@ -101,7 +116,7 @@ this.props.user?
                         const onlineUsername = user.username;
                         if(currUser !== onlineUser){//if it isn't the currently logged in user show a modal button to talk to that person
                             return (                        
-                                    <SideNavItem href='#!icon' icon='face' key={idx}>{onlineUsername}{/*display their name*/}
+                                    <SideNavItem icon='face' key={idx}>{onlineUsername}{/*display their name*/}
                                         {/*where is this chat modal mounted*/}
                                         {/*who's browser is this modal on*/}
                                         {/*other online user that communicates with online user with this modal*/}
@@ -115,7 +130,7 @@ this.props.user?
                                     </SideNavItem>
                                 )
                             } else {//otherwise just show the currently online user's name
-                                return <SideNavItem href='#!icon' icon='face' key={idx}>{currUsername}</SideNavItem>;
+                                return <SideNavItem icon='face' key={idx}>{currUsername}</SideNavItem>;
                             }
                         }
                     )
