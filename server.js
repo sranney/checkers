@@ -20,6 +20,11 @@ var userModel = require("./models/users.js");
 var chatModel = require("./models/chat.js");
 var gameRoomModel = require("./models/gameRoom.js");
 
+//starter seed files for game functionality
+var piecesOne = require("./checkers/src/components/Board/piecesOne.json");
+var piecesTwo = require("./checkers/src/components/Board/piecesTwo.json")
+var squares = require("./checkers/src/components/Board/square.json")
+
 //body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -62,7 +67,12 @@ app.post("/login",function(req,res){
 		data.length===0?
 			userModel.create(UserData).then(res => {
 				const room = UserData.username;
-				gameRoomModel.create({room}).then(res => {})
+				gameRoomModel.create({
+					room: room,
+					squares: squares,
+					piecesOne: piecesOne,
+					piecesTwo: piecesTwo
+				}).then(res => {})
 			})
 		:
 			null;
@@ -145,6 +155,18 @@ app.post("/chats-game",(req,res)=>{
 	});
 })
 
+
+//===================++++++++Game Function Code+++++++++=============================
+app.post("/gameSettings", (req, res)=>{
+	const room = Object.keys(req.body);
+	const gameRoom = room[0];
+	getGamePieces(gameRoom).then(data=>{
+		res.json(data);
+	})
+	console.log(gameRoom);
+});
+
+
 app.get('*', (req, res) => {
 	console.log(req);
 	res.sendFile(path.join(__dirname, '/index.html'))
@@ -153,6 +175,10 @@ app.get('*', (req, res) => {
 if(process.env.NODE_ENV==='production'){
 	
 }
+
+
+
+
 
 let onlineUsersArr = [];
 let trueDisconnect = true;
@@ -321,7 +347,10 @@ const SocketManager = (socket) => {
 
 
 	socket.on("set board", board => {
-		io.emit("board settings", board);
+		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn)
+			.then(data => {
+				io.emit("board settings", data);
+			});
 	})
 
 }
@@ -345,6 +374,21 @@ function logoutUser (email){
 function findUserBySocket(socket){
 	return userModel.find({socket:socket})
 }
+
+//++++++=================+++ GAME PLAY FUNCTIONS ++++=============
+function getGamePieces(roomOwner){
+	return gameRoomModel.find({room:roomOwner});
+}
+
+function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn){
+	return gameRoomModel.update({"room":room},{ $set: {
+		piecesOne: piecesOne,
+		piecesTwo: piecesTwo,
+		playerOneTurn: playerOneTurn
+	}})
+}
+
+
 //sets up the SocketManager function for the socket that has been picked up
 io.on("connection",SocketManager);
 

@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Footer} from 'react-materialize';
-import 'materialize-css';
+// import 'materialize-css';
 import "./LogIn.css";
 import {googleProvider,twitterProvider,facebookProvider,auth} from "../firebase";
 import {Redirect} from "react-router";
