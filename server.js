@@ -319,6 +319,22 @@ const SocketManager = (socket) => {
 		})		
 	})
 
+	socket.on("expel from game",gameObj=>{//NEED TO UPDATE THE GAME PIECES HERE TOO
+		const {room,opponent} = gameObj;
+		gameRoomModel.update({"room":room},{$set:{"opponent":""}}).then(data => {
+			io.emit(`expel_${room}_${opponent}`,{});
+		})
+	})
+
+	socket.on("leave game",gameObj=>{
+		const {room,opponent} = gameObj;
+		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
+		console.log(room);
+		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
+		gameRoomModel.update({"room":room},{$set:{"opponent":""}}).then(data => {
+			io.emit(`leave_${room}`,{opponent});
+		})
+	})
 
 	socket.on("set board", board => {
 		io.emit("board settings", board);

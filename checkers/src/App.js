@@ -8,6 +8,8 @@ import LogIn from "./components/LogIn";
 import Home from "./components/Home";
 import GamePlayPage from "./components/GamePage";
 import NoVacancy from "./components/NoVacancy";
+import Expelled from "./components/Expelled";
+import Leave from "./components/Leave";
 
 //firebase for authentication
 import {auth} from "./firebase";
@@ -122,7 +124,22 @@ class App extends Component {
           render = {(routerProps) => (
             <NoVacancy
               {...routerProps}
-              
+            />
+          )}
+        />
+        <Route 
+          exact path="/Expel"
+          render = {(routerProps) => (
+            <Expelled
+              {...routerProps}
+            />
+          )}
+        />       
+        <Route 
+          exact path="/Leave"
+          render = {(routerProps) => (
+            <Leave
+              {...routerProps}
             />
           )}
         />

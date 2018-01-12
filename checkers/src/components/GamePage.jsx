@@ -17,13 +17,52 @@ class GamePlayPage extends Component {
         this.home = this.home.bind(this);
         this.renderPage = this.renderPage.bind(this);
         this.gameConnect = this.gameConnect.bind(this);
+        this.CheckAndSetGame = this.CheckAndSetGame.bind(this);
+        this.renderExpelButton = this.renderExpelButton.bind(this);
+        this.expelOpponent = this.expelOpponent.bind(this);
+        this.renderLeaveButton = this.renderLeaveButton.bind(this);
+        this.leaveGame = this.leaveGame.bind(this);
         this.state = {
             gamePlayers:[]
         }
     }
 
     componentWillMount(){
-        console.log("component will mount called");
+        this.CheckAndSetGame();
+    }
+
+    componentWillReceiveProps(){
+        this.CheckAndSetGame();
+    }
+
+    componentDidMount () {
+        const room = this.props.match.params.id;
+        console.log(room);
+        const socket = this.props.socket;
+        //message returned from server in response to emitted message in function gameConnect
+        //sets the gameplayers on the client
+        socket.on(`game_connect_${room}`,gamePlayers=>this.setState({gamePlayers}));
+        socket.on(`leave_${room}`,gameObj=>{
+            console.log("?#?#?###?##*#?#*#?##*#*#$&#*$&*#&#$#?#?$?#$I#$#>>>>>>#>#>#>#>#>#>$K#$$#K$#JK$#J$#");
+            this.gameConnect();
+            console.log(`${gameObj.opponent} left the game`);
+        })
+        if(this.props.user){
+            this.gameConnect();
+            const {user} = this.props;
+            const username = user.email.substr(0,user.email.indexOf("@"));
+            if(room!==username){
+                socket.on(`expel_${room}_${username}`,gameObj=>{//gameObj is an empty object
+                    this.props.history.push("/Expel");
+                })
+            }
+            console.log(room);
+
+        }//if the user is logged in then run gameConnect to emit the message to check for users
+    }
+
+    CheckAndSetGame = () => {
+        console.log("game check");
         const room = this.props.match.params.id;
         if(this.props.user){        
             const email = this.props.user.email;
@@ -61,16 +100,7 @@ class GamePlayPage extends Component {
                     this.props.history.push("/");
                 }
             },1000)
-        }
-    }
-
-    componentDidMount () {
-        const room = this.props.match.params.id;
-        const socket = this.props.socket;
-        //message returned from server in response to emitted message in function gameConnect
-        //sets the gameplayers on the client
-        socket.on(`game_connect_${room}`,gamePlayers=>this.setState({gamePlayers}));
-        if(this.props.user){this.gameConnect()}//if the user is logged in then run gameConnect to emit the message to check for users
+        }        
     }
 
     home = () => {
@@ -85,6 +115,45 @@ class GamePlayPage extends Component {
         socket.emit("game connect",{room,username});
     }
 
+    renderExpelButton = () => {
+        return (
+            <Button type="submit" id="expelBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.expelOpponent}>Expel Opponent</Button>             
+        )
+    }
+
+    expelOpponent = () => {
+        const room = this.props.match.params.id;
+        const {socket} = this.props;
+        const {gamePlayers} = this.state;
+
+        if( gamePlayers[1] !== "no opponent yet" && gamePlayers[1] !== undefined ){
+            const opponent = gamePlayers[1];
+            const roomInfo = {
+                room,opponent
+            }
+            socket.emit("expel from game",roomInfo);
+            this.gameConnect();
+        }
+    }
+
+    renderLeaveButton = () => {
+        return (
+            <Button type="submit" id="leaveBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.leaveGame}>Leave Game</Button>             
+        )
+    }
+
+    leaveGame = () => {
+        const room = this.props.match.params.id;
+        const {socket,user} = this.props;
+        const {gamePlayers} = this.state;
+        const roomInfo = {
+            room,user
+        }
+        socket.emit("leave game",roomInfo);
+        this.gameConnect();
+        this.props.history.push("/Leave");
+    }
+
     renderPage = () => {
         const {gamePlayers} = this.state;
         const {socket,user} = this.props;
@@ -97,6 +166,8 @@ class GamePlayPage extends Component {
                     <Button type="submit" id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
                     <br/>
                     <Button type="submit" id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}>Home</Button> 
+                    <br/>
+                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}
                 </div>
 
                 <Board

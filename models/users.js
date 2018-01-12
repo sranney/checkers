@@ -26,6 +26,14 @@ var UsersSchema = new Schema({
   socket:{
     type:String,
     default:""
+  },
+  wins:{
+    type:Number,
+    default:0
+  },
+  losses:{
+    type:Number,
+    default:0
   }
 });
 
