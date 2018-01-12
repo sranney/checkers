@@ -76,7 +76,11 @@ h2,
 #expelBtn,
 #leaveBtn {
     float:right;
-    margin: 12px;
+    margin: 8px;
+}
+
+#gameChatBtn{
+    width: 130.8px;
 }
 
 a,
@@ -96,26 +100,3 @@ textarea {
 .card .card-reveal {
     height: 101%;
 }
-
-
-/* #friendEmail :focus {
-    color: #91c74c;
-} */
-
-
-/* .input-field input[type=date]:focus+label,
-.input-field input[type=text]:focus+label,
-.input-field input[type=email]:focus+label,
-.input-field input[type=password]:focus+label,
-input.input-field:focus+label {
-    color: #91c74c;
-}
-
-.input-field input[type=date]:focus,
-.input-field input[type=text]:focus,
-.input-field input[type=email]:focus,
-.input-field input[type=password]:focus,
-input.input-field:focus {
-    border-bottom: 2px solid #91c74c;
-    box-shadow: none;
-} */

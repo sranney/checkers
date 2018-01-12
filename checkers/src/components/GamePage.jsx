@@ -163,9 +163,10 @@ class GamePlayPage extends Component {
                 <div id="nav" className="right"> 
                     <Button id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
                     <Button id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}> Home </Button> 
-                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}                
+                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}
+
                     <SideNav
-                    trigger={ <a  id="gameChatBtn"  className="btn-floating btn-large waves-effect waves-light orange lighten-1"><i className="material-icons">chat_bubble_outline</i></a>}
+                    trigger={ <Button  id="gameChatBtn"  className="btn orange lighten-1 waves-effect waves-light z-depth-5">Chat</Button>}
                     options={{ closeOnClick: true }}>
                     <SideNavItem userView
                         user={{
@@ -219,7 +220,7 @@ class GamePlayPage extends Component {
                         <li><a className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank" rel="noopener noreferrer">Spencer Ranney</a></li>
                     </ul>
                     }>
-                        <h5 className="white-text">Final Project: Check your Checkers</h5>
+                        <h5 className="white-text">Final Project: Check-Your-Checkers</h5>
                         <p className="grey-text text-lighten-4">2017 Fall Cohort of the SMU Coding Bootcamp</p>
                 </Footer>
             </main>            
