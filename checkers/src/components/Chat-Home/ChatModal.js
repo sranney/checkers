@@ -15,6 +15,7 @@ import './Chat.css';
 export default class ChatModal extends React.Component {
     constructor(props){
         super(props);
+        
         this.Send = this.Send.bind(this);
         this.SendRoomLink = this.SendRoomLink.bind(this);
         this.initiateTyping = this.initiateTyping.bind(this);

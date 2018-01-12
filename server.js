@@ -285,6 +285,16 @@ const SocketManager = (socket) => {
 		io.emit(`typing_home_${socketListenerID}`,typingRes);
 	})
 
+	socket.on("typing-game",typingObj=>{
+		console.log("typing sent to server");
+		const {currUsername,location,isTyping} = typingObj;
+		const socketListenerID = location.replace("/GamePage/","");		
+		const typingRes = isTyping ? currUsername : false;//false or the message created will say currUsername is typing
+		console.log("where to send: "+socketListenerID);
+		io.emit(`typing_game_${socketListenerID}`,typingRes);
+	})
+
+
 	//for sending back information regarding whose playing a game
 	socket.on("game connect",playerObj=>{//whenever a player connects to a particular game page, message emitted from client
 		const {room,username} = playerObj;
