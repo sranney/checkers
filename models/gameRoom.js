@@ -22,6 +22,10 @@ var grSchema = new Schema({
   piecesTwo:{
     type:Array,
     default:[]
+  },
+  playerOneTurn: {
+    type: Boolean,
+    default: true
   }
 });
 

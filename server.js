@@ -165,7 +165,6 @@ app.post("/gameSettings", (req, res)=>{
 });
 
 app.get('*', (req, res) => {
-	console.log(req);
 	res.sendFile(path.join(__dirname, '/index.html'))
 });
 
@@ -173,6 +172,10 @@ if(process.env.NODE_ENV==='production'){
 	
 }
 
+
+
+
+//array that will be used to store users that are online and be sent to the browser
 let onlineUsersArr = [];
 let trueDisconnect = true;
 
@@ -188,9 +191,6 @@ const SocketManager = (socket) => {
 		onlineUsers_currUser = onlineUsersArr.filter(user=>{//
 			return user.email === email;
 		})
-		console.log("***************************************")
-		console.log(onlineUsers_currUser);
-		console.log("***************************************")
 		if(onlineUsers_currUser.length === 0 ){ 
 			onlineUsersArr.push(userObjForOnlineUsers)
 		} else {
@@ -233,7 +233,6 @@ const SocketManager = (socket) => {
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
 
-
 	})
 
 
@@ -262,9 +261,7 @@ const SocketManager = (socket) => {
 	})
 
 	socket.on("chat-game",(msgObj)=>{
-		console.log("socket - chat-game - received");
 		const {location,sender,to,message} = msgObj;
-		console.log(location);
 		const dataObj = {
 			sender,
 			room:`${sender}-game`,
@@ -316,9 +313,6 @@ const SocketManager = (socket) => {
 
 	socket.on("leave game",gameObj=>{
 		const {room,opponent} = gameObj;
-		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
-		console.log(room);
-		console.log("/*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*//*?*/");
 		gameRoomModel.update({"room":room},{$set:{"opponent":""}}).then(data => {
 			io.emit(`leave_${room}`,{opponent});
 		})
@@ -372,7 +366,8 @@ function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn){
 	}})
 }
 
-//sets up the SocketManager function for the socket that has been picked up
+
+//sets up the SocketManager function for the socket that has been connected
 io.on("connection",SocketManager);
 
 
