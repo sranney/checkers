@@ -1360,10 +1360,12 @@ class Board extends Component {
 				<div className="col-md-4">
 					{message}
 				</div>
-				<div className="boardAndScore">
 
-					<div className="playerPieces col-md-4 col-sm-2">
-						<div className="col-md-6">
+
+				<div className="boardAndScore col-md-12">
+
+					<div className="playerPieces col-md-5 col-sm-2">
+						<div className="col-md-6 col-sm-4">
 							<h3>{`${room}'s Score`}</h3>
 							{this.state.playerOneScore.map((score, index) =>
 								<div
@@ -1373,7 +1375,7 @@ class Board extends Component {
 								</div>
 							)}
 						</div>
-						<div className="col-md-6">
+						<div className="col-md-6 col-sm-4">
 							<h3>{`${gamePlayers[1]}'s Score`}</h3>
 							{this.state.playerTwoScore.map((score, index) =>
 								<div
