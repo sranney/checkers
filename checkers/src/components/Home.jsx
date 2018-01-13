@@ -82,11 +82,7 @@ this.props.user?
             <br />
             Also feel free to chat with your opponent using the chat icon in the top right-hand corner or the screen.
             Have a great time playing Check-Your-Checkers!
-            <br/>
-            <br/>
-            Cheers,
-            <br/>
-            Aaron, Phil and Spencer
+
             </h4>}
 	    header={<CardTitle id="h2h" reveal image='http://www.cityrider.com/fixed/43aspect.png' >
         <span class="orange-text text-lighten-1"><h2>Head to Head</h2></span><nh/><h4>Click Here To Learn How To Play</h4></CardTitle>}

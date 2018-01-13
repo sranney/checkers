@@ -27,10 +27,12 @@ export default class Leave extends React.Component {
     }
     render(){
         return(
-            <Card className="red lighten-5">
-                <h2 className='card-content red-text'>Returning to Home</h2>
-                <div className='card-content red-text'><p>Redirecting to home page in {this.state.redirectTime} seconds.</p></div>
+            <div className='Container col-md-12 text-center' id="returnHomeDiv">
+            <Card className="grey-lighten-3">
+                <h2 className='card-content orange-text lighten-1'>Returning to Home</h2>
+                <div className='card-content orange-text lighten-1'><p>Redirecting to home page in {this.state.redirectTime} seconds.</p></div>
             </Card>
+            </div>
         )
     }
 }

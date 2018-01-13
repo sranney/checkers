@@ -50,7 +50,7 @@ h2,
 }
 
 .btn-large {
-    width: 200px;
+    width: 250px;
     margin: 8px;
     font-size: 16px;
 }
@@ -106,4 +106,8 @@ Footer.copyrights {
 #sidenav-overlay,
 .modal-overlay {
     opacity: 0 !important;
+}
+
+.input-field:focus~label {
+    color: #91c74c !important;
 }

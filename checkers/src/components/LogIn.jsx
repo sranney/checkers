@@ -45,7 +45,7 @@ class LogIn extends React.Component{
   :
   <main>
     <br/>
-    <div className='container'>
+    <div className='container-responsive'>
     <div className="jumbotron text-center"></div>
   <center>
     <br/>

@@ -139,7 +139,7 @@ export default class ChatModal extends React.Component {
       
     render() {
         const divStyle = {
-            margin: '8px' 
+            margin: '5px' 
         }
 
         const {currUsername,otherUsername} = this.state;

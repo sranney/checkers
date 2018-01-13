@@ -27,10 +27,12 @@ export default class Expelled extends React.Component {
     }
     render(){
         return(
+            <div className='Container col-md-12 text-center'>
             <Card className="orange lighten-1">
-                <h2 className='card-content red-text'>You Have Been Expelled!</h2>
-                <div className='card-content red-text'><p>Redirecting to home page in {this.state.redirectTime} seconds.</p></div>
+                <h2 className='card-content grey-text text-lighten-3'>You Have Been Expelled!</h2>
+                <div className='card-content grey-text text-lighten-3'><p>Redirecting to home page in {this.state.redirectTime} seconds.</p></div>
             </Card>
+            </div>
         )
     }
 }

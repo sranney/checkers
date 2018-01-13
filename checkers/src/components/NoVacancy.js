@@ -27,10 +27,12 @@ export default class NoVacancy extends React.Component {
     }
     render(){
         return(
-            <Card className="red lighten-5">
-                <h2 className='card-content red-text'>No Vacancy</h2>
-                <div className='card-content red-text'><p>Room already has an opponent! Redirecting to home page in {this.state.redirectTime} seconds.</p></div>
-            </Card>
+            <div className='Container col-md-12 text-center' id="returnHomeDiv">
+                <Card className="light-green">
+                    <h2 className='card-content grey-text text-lighten-3'>No Vacancy</h2>
+                    <div className='card-content grey-text text-lighten-3'><p>Room already has an opponent! Redirecting to home page in {this.state.redirectTime} seconds.</p></div>
+                </Card>
+            </div>
         )
     }
 }

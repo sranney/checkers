@@ -166,7 +166,7 @@ class GamePlayPage extends Component {
                 <div id="nav" className="right"> 
 
                     <SideNav
-                    trigger={ <Button  id="gameChatBtn"  className="btn orange lighten-1 waves-effect waves-light z-depth-5">Menu</Button>}
+                    trigger={ <Button id="gameChatBtn"  className="btn orange lighten-1 waves-effect waves-light z-depth-5">Menu</Button>}
                     options={{ closeOnClick: true }}>
                     <SideNavItem userView
                         user={{
