@@ -132,6 +132,8 @@ class GamePlayPage extends Component {
             socket.emit("expel from game",roomInfo);
             this.gameConnect();
         }
+        console.log(room);
+        socket.emit("reset game",room);
     }
 
     renderLeaveButton = () => {
@@ -148,6 +150,7 @@ class GamePlayPage extends Component {
             room,user
         }
         socket.emit("leave game",roomInfo);
+        socket.emit("reset game",room);
         this.gameConnect();
         this.props.history.push("/Leave");
     }

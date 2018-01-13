@@ -29,6 +29,7 @@ class Board extends Component {
 		this.gameRoom = this.props.room
 		this.socket.emit("get start", this.gameRoom);
 		this.socket.on(`start board - ${this.gameRoom}`, data => {
+			console.log("start board");
 			this.setState({
 				squares: data.squares,
 				piecesOne: data.piecesOne,
