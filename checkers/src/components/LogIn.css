@@ -107,3 +107,9 @@ Footer.copyrights {
 .modal-overlay {
     opacity: 0 !important;
 }
+
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+}

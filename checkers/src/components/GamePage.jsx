@@ -10,6 +10,78 @@ import {Button, Modal, SideNavItem, SideNav, Input, Footer} from 'react-material
 //components
 import Board from './Board';
 import ChatModal from "./Chat-Game";
+import Canvas from "./Canvas";
+
+let pieces = [];
+let numPieces = 25;
+let lastUpdateTime = Date.now();
+
+function randColor(){
+    let colors = ["#f00","#0f0","#00f","#ff0","#f0f","#0ff"];
+    return colors[Math.floor(Math.random()*colors.length)]
+}
+
+function update(){
+
+    if(pieces.length>0){
+        let now = Date.now();
+        let deltaTime = now - lastUpdateTime;
+
+        for ( let i = pieces.length - 1 ; i >= 0 ; i --) {
+            let p = pieces[i];
+            if(p.y > canvas.height){
+                pieces.splice(i,1);
+                continue;
+            }
+            p.y += p.gravity * deltaTime;
+            p.rotation += p.rotationSpeed * deltaTime;
+        }
+
+        while(pieces.length<numPieces&&totalPieces<75){
+            pieces.push(new Piece(Math.random() * canvas.width,-20));
+            totalPieces++;
+        }
+
+        lastUpdateTime = now;			
+        setTimeout(update,1);
+        draw();
+    } else {
+        var canvasElmt = document.querySelector("canvas");
+        document.querySelector("body").removeChild(canvasElmt);
+        totalPieces = 0;
+    }
+}
+
+function draw(){
+    context.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(function(p){
+        context.save();
+        
+        context.fillStyle = p.color;
+
+        context.translate(p.x+p.size/2,p.y+p.size/2);
+        context.rotate(p.rotation);
+
+        context.fillRect(-p.size/2,-p.size/2,p.size,p.size)
+
+        context.restore();
+    })
+    requestAnimationFrame(draw);
+
+}
+
+function Piece(x,y){
+    this.x = x;
+    this.y = y;
+    this.size = (Math.random() * 0.5 + 0.75) * 15;
+    this.gravity = (Math.random() * 0.5 + 0.75) * .7;
+    this.rotation = (Math.PI * 2) * Math.random();
+    this.rotationSpeed = this.rotation * 0.005;
+    this.color = randColor();
+}
+
+
+var dropConf = false,canvas,context,totalPieces=0;
 
 class GamePlayPage extends Component {
     constructor(props){
@@ -22,6 +94,7 @@ class GamePlayPage extends Component {
         this.expelOpponent = this.expelOpponent.bind(this);
         this.renderLeaveButton = this.renderLeaveButton.bind(this);
         this.leaveGame = this.leaveGame.bind(this);
+        this.renderCanvas = this.renderCanvas.bind(this);
         this.state = {
             gamePlayers:[]
         }
@@ -155,6 +228,22 @@ class GamePlayPage extends Component {
         this.props.history.push("/Leave");
     }
 
+    renderCanvas = ()=>{
+        dropConf = !dropConf;
+        var canvasElmt = document.createElement("canvas");
+        canvasElmt.setAttribute("id","confetti");
+        document.querySelector("body").appendChild(canvasElmt);
+        canvas = document.getElementById("confetti");
+        canvas.width=window.outerWidth-20;
+        canvas.height=window.innerHeight-20;
+        context = canvas.getContext("2d");
+        while(pieces.length < numPieces){
+            pieces.push(new Piece(Math.random()*canvas.width,Math.random()*canvas.height));
+            totalPieces++;
+        }
+        update();       
+    }
+
     renderPage = () => {
         const {gamePlayers} = this.state;
         const {socket,user} = this.props;
@@ -162,7 +251,7 @@ class GamePlayPage extends Component {
         const currUsername = currEmail.substr(0,currEmail.indexOf("@"));
         const room = this.props.match.params.id;       
         return (
-            <main>
+            <main style={{position:"relative"}}>
                 <div id="nav" className="right"> 
 
                     <SideNav
@@ -211,7 +300,7 @@ class GamePlayPage extends Component {
                 />
 
 
-                
+                <button onClick={this.renderCanvas}>Canvas</button>
                 <Footer id = "LogInFooter" copyrights="&copy 2017 SuperGroup"
                     className="light-green"
                     links={
