@@ -359,13 +359,29 @@ const SocketManager = (socket) => {
 	socket.on("reset game",room=>{
 		console.log("game reset");
 		console.log(room)
-		updateGameBoard(room,piecesOne,piecesTwo,true)
+		updateGameBoard(room,piecesOne,piecesTwo,true,0, 0)
 			.then(data=>{
 				getGamePieces(room).then(data=>{
 					io.emit(`start board - ${room}`, data[0]);
 				})
 			})
 	})
+
+	socket.on("game won",player=>{
+		console.log("game won");
+		const {userName, room} = player;
+		console.log(room)
+		userModel.update({"username": userName}, { $inc: {wins:1} }).then(dataPass => {
+			updateGameBoard(room,piecesOne,piecesTwo,true,0, 0)
+				.then(data=>{
+					getGamePieces(room).then(data=>{
+						io.emit(`start board - ${room}`, data[0]);
+					})
+				})
+			})
+
+	})
+
 
 }
 

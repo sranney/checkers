@@ -26,7 +26,7 @@ class Board extends Component {
 			this.pieceSelected = false;
 			this.gameRoom = "";
 			this.playerOneScoreArray = [];
-			this.playerTwoScoreArray = []
+			this.playerTwoScoreArray = [];
 	}
 
 	componentDidMount = () => {
@@ -34,19 +34,27 @@ class Board extends Component {
 		this.socket.emit("get start", this.gameRoom);
 		this.socket.on(`start board - ${this.gameRoom}`, data => {
 			console.log("start board");
+			console.log("Player One score", data.playerOneScore);
+
+			let playerOneArray = [];
+			let playerTwoArray = [];
+
 			for(var i=0; i<data.playerOneScore; i++){
-				this.playerOneScoreArray.push("piece");
+				playerOneArray.push("piece");
 			}
 			for(var j=0; j<data.playerTwoScore; j++){
-				this.playerTwoScoreArray.push("piece");
-			}	
+				playerTwoArray.push("piece");
+			}
+			console.log("Player 1 array", playerOneArray);
+			console.log(playerTwoArray);
+
 			this.setState({
 				squares: data.squares,
 				piecesOne: data.piecesOne,
 				piecesTwo: data.piecesTwo,
 				playerOneTurn: data.playerOneTurn,
-				playerOneScore: this.playerOneScoreArray,
-				playerTwoScore: this.playerTwoScoreArray
+				playerOneScore: playerOneArray,
+				playerTwoScore: playerTwoArray
 			});
 
 		})
@@ -244,7 +252,7 @@ class Board extends Component {
 				fullAdjoiningSquareCheckDownLeft[0].class = "newClass";
 				fullAdjoiningSquareCheckDownLeft[0].position = {top: 1000, left: 1000};
 				this.state.playerOneScore.push("piece");
-				this.checkWinner(this.state.playerOneScore);
+				this.checkWinner(this.state.playerOneScore, pieceToCheck.player);
 				//when the piece lands on the bottom row it should be made a king piece
 				if(pieceToCheck.position.top === 330){
 					this.makeKing(pieceToCheck);
@@ -262,6 +270,7 @@ class Board extends Component {
 					playerTwoScore: this.state.playerTwoScore.length,
 					gameRoom: this.gameRoom
 				});
+				this.checkWinner(this.state.playerOneScore, pieceToCheck.player);
 				this.socket.emit("get start", this.gameRoom);
 			}
 		}			
@@ -295,7 +304,7 @@ class Board extends Component {
 				fullAdjoiningSquareCheckDownRight[0].class = "newClass";
 				fullAdjoiningSquareCheckDownRight[0].position = {top: 1000, left: 1000};
 				this.state.playerOneScore.push("piece");
-				this.checkWinner(this.state.playerOneScore);
+				
 				//when the piece lands on the bottom row it should be made a king piece
 				if(pieceToCheck.position.top === 330){
 					this.makeKing(pieceToCheck);
@@ -313,6 +322,7 @@ class Board extends Component {
 					playerTwoScore: this.state.playerTwoScore.length,
 					gameRoom: this.gameRoom
 				});
+				this.checkWinner(this.state.playerOneScore, pieceToCheck.player);
 				this.socket.emit("get start", this.gameRoom);
 			}
 		}
@@ -848,6 +858,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -863,6 +875,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -878,6 +892,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -893,6 +909,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -982,6 +1000,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -997,6 +1017,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -1012,6 +1034,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -1027,6 +1051,8 @@ class Board extends Component {
 				piecesTwo: this.state.piecesTwo,
 				playerOneTurn: this.state.playerOneTurn,
 				pieceSelected: this.pieceSelected,
+				playerOneScore: this.state.playerOneScore.length,
+				playerTwoScore: this.state.playerTwoScore.length,
 				gameRoom: this.gameRoom
 			});
 			this.socket.emit("get start", this.gameRoom);
@@ -1245,6 +1271,8 @@ class Board extends Component {
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected,
+					playerOneScore: this.state.playerOneScore.length,
+					playerTwoScore: this.state.playerTwoScore.length,
 					gameRoom: this.gameRoom
 				});
 				this.socket.emit("get start", this.gameRoom);			
@@ -1259,6 +1287,8 @@ class Board extends Component {
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected,
+					playerOneScore: this.state.playerOneScore.length,
+					playerTwoScore: this.state.playerTwoScore.length,
 					gameRoom: this.gameRoom
 				});
 				this.socket.emit("get start", this.gameRoom);			
@@ -1277,6 +1307,8 @@ class Board extends Component {
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected,
+					playerOneScore: this.state.playerOneScore.length,
+					playerTwoScore: this.state.playerTwoScore.length,
 					gameRoom: this.gameRoom
 				});
 				this.socket.emit("get start", this.gameRoom);			
@@ -1291,6 +1323,8 @@ class Board extends Component {
 					piecesTwo: this.state.piecesTwo,
 					playerOneTurn: this.state.playerOneTurn,
 					pieceSelected: this.pieceSelected,
+					playerOneScore: this.state.playerOneScore.length,
+					playerTwoScore: this.state.playerTwoScore.length,
 					gameRoom: this.gameRoom
 				});
 				this.socket.emit("get start", this.gameRoom);		
@@ -1300,8 +1334,13 @@ class Board extends Component {
 	}
 
 	checkWinner = (arr1, player) => {
-		console.log("Array", arr1);
-		console.log("PLAYER", player);
+		const {room,currUser,gamePlayers,socket,renderCanvas} = this.props;
+		const userName = gamePlayers[player - 1];
+		if(arr1.length>11){
+			console.log("GAME IS WON!");
+			socket.emit("game won", {room, userName});
+			renderCanvas();
+		}
 	}			
 
 
