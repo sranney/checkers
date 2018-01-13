@@ -115,7 +115,7 @@ class GamePlayPage extends Component {
 
     renderExpelButton = () => {
         return (
-            <Button id="expelBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.expelOpponent}>Expel Opponent</Button>             
+            <Button id="expelBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-2" onClick={this.expelOpponent}>Expel Opponent</Button>             
         )
     }
 
@@ -136,7 +136,7 @@ class GamePlayPage extends Component {
 
     renderLeaveButton = () => {
         return (
-            <Button id="leaveBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.leaveGame}>Leave Game</Button>             
+            <Button id="leaveBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-2" onClick={this.leaveGame}>Leave Game</Button>             
         )
     }
 
@@ -161,12 +161,9 @@ class GamePlayPage extends Component {
         return (
             <main>
                 <div id="nav" className="right"> 
-                    <Button id="logOutBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.props.logOut}>Logout</Button>
-                    <Button id="homeBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-5" onClick={this.home}> Home </Button> 
-                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}
 
                     <SideNav
-                    trigger={ <Button  id="gameChatBtn"  className="btn orange lighten-1 waves-effect waves-light z-depth-5">Chat</Button>}
+                    trigger={ <Button  id="gameChatBtn"  className="btn orange lighten-1 waves-effect waves-light z-depth-5">Menu</Button>}
                     options={{ closeOnClick: true }}>
                     <SideNavItem userView
                         user={{
@@ -175,7 +172,9 @@ class GamePlayPage extends Component {
                             name: this.props.user.displayName,
                             email: this.props.user.email
                             }}/>
-                    <SideNavItem href='#!icon' icon='person_pin'>My Profile</SideNavItem>
+                    <Button id="logOutBtn" className = "btn-small orange lighten-1 waves-effect waves-light z-depth-2" onClick={this.props.logOut}>Logout</Button>                   
+                    <Button id="homeBtn" className = "btn-small orange lighten-1 waves-effect waves-light z-depth-2" onClick={this.home}> Home </Button>
+                    {room === currUsername ? this.renderExpelButton() : this.renderLeaveButton()}
                     <SideNavItem divider />
                     <SideNavItem subheader>{this.props.match.params.id} Game Players</SideNavItem>
                     <SideNavItem divider />
@@ -215,7 +214,6 @@ class GamePlayPage extends Component {
                     links={
                     <ul>
                         <li><a className="grey-text text-lighten-3" href="https://github.com/AaronA05" target="_blank" rel="noopener noreferrer">Aaron Arndt</a></li>
-                        <li><a className="grey-text text-lighten-3" href="https://github.com/satsumao" target="_blank" rel="noopener noreferrer">Matthew Duckworth</a></li>
                         <li><a className="grey-text text-lighten-3" href="https://github.com/PhilipK2" target="_blank" rel="noopener noreferrer">Philip Kappaz II</a></li>
                         <li><a className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank" rel="noopener noreferrer">Spencer Ranney</a></li>
                     </ul>

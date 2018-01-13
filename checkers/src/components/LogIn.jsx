@@ -44,33 +44,32 @@ class LogIn extends React.Component{
   <Redirect to="/home"/>
   :
   <main>
+    <br/>
+    <div className='container'>
     <div className="jumbotron text-center"></div>
   <center>
     <br/>
     <div className="container">
       <div>
         <Button className = "btn-large red waves-effect waves-light z-depth-5" onClick={()=>this.authenticate("google")}><i className="fab fa-google fa-2x" ></i> Log in With Google</Button>
-        <br />
-        <Button className = "btn-large blue lighten-1 waves-effect waves-light z-depth-5" onClick={()=>this.authenticate("twitter")}><i className="fab fa-twitter fa-2x"></i> Log in With twitter</Button>
-        <br />
-        <Button className = "btn-large indigo darken-1 waves-effect waves-light z-depth-5" onClick={()=>this.authenticate("facebook")}><i className="fab fa-facebook-f fa-2x"></i> Log in With facebook</Button>
       </div> 
     </div>
   </center>
 
-  <Footer id = "LogInFooter" copyrights="&copy 2017 SuperGroup"
+  <Footer id = "LogInFooter" 
+      copyrights="&copy 2017 SuperGroup"
       className="light-green"
       links={
         <ul>
           <li><a className="grey-text text-lighten-3" href="https://github.com/AaronA05" target="_blank"  rel="noopener noreferrer">Aaron Arndt</a></li>
-          <li><a className="grey-text text-lighten-3" href="https://github.com/satsumao" target="_blank" rel="noopener noreferrer">Matthew Duckworth</a></li>
           <li><a className="grey-text text-lighten-3" href="https://github.com/PhilipK2" target="_blank" rel="noopener noreferrer">Philip Kappaz II</a></li>
           <li><a className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank" rel="noopener noreferrer">Spencer Ranney</a></li>
         </ul>
         }>
           <h5 className="white-text">Final Project: Check-Your-Checkers</h5>
-          <p className="grey-text text-lighten-4">2017 Fall Cohort of the SMU Coding Bootcamp</p>
-  </Footer>   
+          <p className="grey-text text-lighten-4 ">2017 Fall Cohort of the SMU Coding Bootcamp</p>
+  </Footer>
+  </div>   
   </main>
   )
   }

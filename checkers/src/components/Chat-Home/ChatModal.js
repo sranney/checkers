@@ -138,6 +138,9 @@ export default class ChatModal extends React.Component {
     }
       
     render() {
+        const divStyle = {
+            margin: '8px' 
+        }
 
         const {currUsername,otherUsername} = this.state;
 
@@ -176,10 +179,15 @@ export default class ChatModal extends React.Component {
                                 onKeyUp={e=>{e.keyCode !== 13 && this.initiateTyping()}}
                             />
                         </div>
-                        <Button className = "btn light-green waves-effect waves-light z-depth-2">Send Message</Button>
+                        <Button className = "btn light-green waves-effect waves-light z-depth-2"
+                                style = {divStyle}
+                        >
+                            Send Message
+                        </Button>
                         <Button
                             type="button"
                             className = "btn light-green waves-effect waves-light z-depth-2"
+                            style = {divStyle}
                             onClick = {this.SendRoomLink}
                         >
                             Send Room

@@ -142,7 +142,7 @@ export default class ChatModal extends React.Component {
         return(
             <Modal bottomSheet
                 header = {<h2>{`Your conversation with ${this.props.user}`}</h2>}
-                trigger={<Button className = " btn light-green waves-effect waves-light" id="chat" icon='chat_bubble_outline'></Button>}>
+                trigger={<Button className = " btn light-green waves-effect waves-light z-depth-2" id="chat" icon='chat_bubble_outline'></Button>}>
                 <div>
                     <div ref="gameChatBox" className="card-panel grey darken-3 chatBox">
                         {

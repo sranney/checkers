@@ -50,7 +50,7 @@ h2,
 }
 
 .btn-large {
-    width: 27%;
+    width: 200px;
     margin: 8px;
     font-size: 16px;
 }
@@ -63,23 +63,21 @@ h2,
     margin-right: 10px;
 }
 
-#nav{
-    display:flex;
+#nav {
+    display: flex;
     flex-direction: column;
-    justify-content:center;
+    justify-content: center;
 }
 
 #logOutBtn,
 #homeBtn,
-#gameBtn,
 #gameChatBtn,
 #expelBtn,
 #leaveBtn {
-    float:right;
-    margin: 8px;
+    margin: 5px;
 }
 
-#gameChatBtn{
+#gameChatBtn {
     width: 130.8px;
 }
 
@@ -99,4 +97,13 @@ textarea {
 
 .card .card-reveal {
     height: 101%;
+}
+
+Footer.copyrights {
+    bottom: 0;
+}
+
+#sidenav-overlay,
+.modal-overlay {
+    opacity: 0 !important;
 }

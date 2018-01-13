@@ -51,6 +51,10 @@ class Home extends React.Component {
     }
 
     render(){
+        // const divStyle = {
+        //     background: 'none' 
+        // }
+
         let email=null;
         let name=null;
         if(this.props.user){
@@ -64,20 +68,7 @@ class Home extends React.Component {
 this.props.user?
 
 <main>  
-    <div>
-        <Button  
-            id="logOutBtn" 
-            className = "btn orange lighten-1 waves-effect waves-light z-depth-5" 
-            onClick={this.props.logOut}>
-            Logout
-        </Button>       
-        <Button 
-            id="gameBtn" 
-            className = "btn orange lighten-1 waves-effect waves-light z-depth-5" 
-            onClick={this.gameNav}>
-            Game Page
-        </Button>       
-    </div>
+<br/>
     <div className="container">
         <div className="jumbotron text-center"></div>
     <Card className='small'
@@ -90,7 +81,13 @@ this.props.user?
             <br />
             <br />
             Also feel free to chat with your opponent using the chat icon in the top right-hand corner or the screen.
-            Have a great time playing Check-Your-Checkers!</h4>}
+            Have a great time playing Check-Your-Checkers!
+            <br/>
+            <br/>
+            Cheers,
+            <br/>
+            Aaron, Phil and Spencer
+            </h4>}
 	    header={<CardTitle id="h2h" reveal image='http://www.cityrider.com/fixed/43aspect.png' >
         <span class="orange-text text-lighten-1"><h2>Head to Head</h2></span><nh/><h4>Click Here To Learn How To Play</h4></CardTitle>}
     >   
@@ -105,7 +102,20 @@ this.props.user?
                             name: this.props.user.displayName,
                             email: this.props.user.email
 		                    }}/>
-                    <SideNavItem href='#!icon' icon='person_pin'>My Profile</SideNavItem>
+                                <Button  
+                            id="logOutBtn" 
+                            className = "btn orange lighten-1 waves-effect waves-light z-depth-2" 
+                            onClick={this.props.logOut}>
+                            Logout
+                        </Button>  
+                        <Button 
+                            id="gameBtn" 
+                            className = "btn orange lighten-1 waves-effect waves-light z-depth-2 center" 
+                            onClick={this.gameNav}
+                            >
+                            Game Page
+                        </Button>
+
                     <SideNavItem divider />
                     <SideNavItem subheader>Online Users</SideNavItem>
                     <SideNavItem divider />
@@ -162,7 +172,6 @@ this.props.user?
             links={
                 <ul>
                     <li><a key={1} className="grey-text text-lighten-3" href="https://github.com/AaronA05" target="_blank" rel="noopener noreferrer">Aaron Arndt</a></li>
-                    <li><a key={2} className="grey-text text-lighten-3" href="https://github.com/satsumao" target="_blank" rel="noopener noreferrer">Matthew Duckworth</a></li>
                     <li><a key={3} className="grey-text text-lighten-3" href="https://github.com/PhilipK2" target="_blank" rel="noopener noreferrer">Philip Kappaz II</a></li>
                     <li><a key={4} className="grey-text text-lighten-3" href="https://github.com/sranney" target="_blank" rel="noopener noreferrer">Spencer Ranney</a></li>
                 </ul>
