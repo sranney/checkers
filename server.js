@@ -342,6 +342,17 @@ const SocketManager = (socket) => {
 			});
 	})
 
+	socket.on("reset game",room=>{
+		console.log("game reset");
+		console.log(room)
+		updateGameBoard(room,piecesOne,piecesTwo,true)
+			.then(data=>{
+				getGamePieces(room).then(data=>{
+					io.emit(`start board - ${room}`, data[0]);
+				})
+			})
+	})
+
 }
 
 
