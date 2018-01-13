@@ -16,7 +16,9 @@ class Board extends Component {
 				squares: [],
 				piecesOne: [],
 				piecesTwo: [],
-				playerOneTurn: true
+				playerOneTurn: true,
+				playerOneScore: [],
+				playerTwoScore: []
 			}
 			this.socket = this.props.socket;
 			this.squareToMoveTo = "";
@@ -227,6 +229,8 @@ class Board extends Component {
 				//removes the class of the piece which was jumped and moves its location to get it off the board
 				fullAdjoiningSquareCheckDownLeft[0].class = "newClass";
 				fullAdjoiningSquareCheckDownLeft[0].position = {top: 1000, left: 1000};
+				this.state.playerOneScore.push("piece");
+				this.checkWinner(this.state.playerOneScore);
 				//when the piece lands on the bottom row it should be made a king piece
 				if(pieceToCheck.position.top === 330){
 					this.makeKing(pieceToCheck);
@@ -274,6 +278,8 @@ class Board extends Component {
 				//removes the class of the piece which was jumped and moves its location to get it off the board
 				fullAdjoiningSquareCheckDownRight[0].class = "newClass";
 				fullAdjoiningSquareCheckDownRight[0].position = {top: 1000, left: 1000};
+				this.state.playerOneScore.push("piece");
+				this.checkWinner(this.state.playerOneScore);
 				//when the piece lands on the bottom row it should be made a king piece
 				if(pieceToCheck.position.top === 330){
 					this.makeKing(pieceToCheck);
@@ -1224,7 +1230,12 @@ class Board extends Component {
 
 	}
 
-			
+	checkWinner = (arr1) => {
+		let measureWinner = arr1.length
+		if(measureWinner > 11){
+			console.log("Winner Winner Winner");
+		}
+	}			
 
 
 	
@@ -1240,39 +1251,66 @@ class Board extends Component {
 		}
 		return (
 			<div>
-				<div className="fullGameBoard">
-					<div className='board'>
-						{this.state.squares.map(square =>
-							<div 
-								key={square.id}  
-								className={square.class}
-								onClick={() => this.getSquare(square.id)}
-								 >
-							</div>
+				<div className="col-md-4">
+					{message}
+				</div>
+				<div className="boardAndScore">
+
+					<div className="playerPieces col-md-4 col-sm-2">
+						<div className="col-md-6">
+							<h3>{`${gamePlayers[1]}'s Score`}</h3>
+							{this.state.playerOneScore.map((score, index) =>
+								<div
+									key={index}
+									className="deadPiece deadPlayerTwo"
+									>
+								</div>
 							)}
-						{this.state.piecesOne.map(piece => 
-							<div 
-								key={piece.id}
-								className={piece.class}
-								style={piece.position}
-								onClick={() => {currUser === room ? this.findMovesOne(piece.id):null}}
-								>
-							</div>
+						</div>
+						<div className="col-md-6">
+							<h3>{`${room}'s Score`}</h3>
+							{this.state.playerTwoScore.map((score, index) =>
+								<div
+									key={index}
+									className="deadPiece deadPlayerOne"
+									>
+								</div>
 							)}
-						{this.state.piecesTwo.map(piece => 
-							<div 
-								key={piece.id}
-								className={piece.class}
-								style={piece.position}
-								onClick={() => {currUser === gamePlayers[1] ? this.findMovesTwo(piece.id):null}}
-								>
-							</div>
-							)}					
+						</div>	
+					</div>
+
+					<div className="fullGameBoard">
+						<div className='board'>
+							{this.state.squares.map(square =>
+								<div 
+									key={square.id}  
+									className={square.class}
+									onClick={() => this.getSquare(square.id)}
+									 >
+								</div>
+								)}
+							{this.state.piecesOne.map(piece => 
+								<div 
+									key={piece.id}
+									className={piece.class}
+									style={piece.position}
+									onClick={() => {currUser === room ? this.findMovesOne(piece.id):null}}
+									>
+								</div>
+								)}
+							{this.state.piecesTwo.map(piece => 
+								<div 
+									key={piece.id}
+									className={piece.class}
+									style={piece.position}
+									onClick={() => {currUser === gamePlayers[1] ? this.findMovesTwo(piece.id):null}}
+									>
+								</div>
+								)}					
+						</div>
 					</div>
 				</div>
-			<div className="col-md-4">
-				{message}
-			</div>
+
 			</div>
 		);
 	}
