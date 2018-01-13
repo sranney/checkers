@@ -26,6 +26,14 @@ var grSchema = new Schema({
   playerOneTurn: {
     type: Boolean,
     default: true
+  },
+  playerOneScore: {
+    type: Number,
+    default: 0
+  },
+  playerTwoScore: {
+    type: Number,
+    default: 0
   }
 });
 

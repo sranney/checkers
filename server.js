@@ -164,6 +164,22 @@ app.post("/gameSettings", (req, res)=>{
 	console.log(gameRoom);
 });
 
+
+app.get("/getRankings",(req,res)=>{
+	userModel.find().sort({wins:-1}).then(data=>{
+		const rankings = data.map(player=>{
+			const {username,wins} = player;
+			return [
+				username,
+				wins
+			]
+		})
+		rankings.unshift(['Player','Wins']);
+		
+		res.json(rankings);
+	});
+})
+
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '/index.html'))
 });
@@ -336,7 +352,7 @@ const SocketManager = (socket) => {
 	})
 
 	socket.on("set board", board => {
-		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn)
+		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn, board.playerOneScore, board.playerTwoScore)
 			.then(data => {
 				io.emit("board settings", data);
 			});
@@ -380,11 +396,13 @@ function getGamePieces(roomOwner){
 	return gameRoomModel.find({room:roomOwner});
 }
 
-function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn){
+function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn, playerOneScore, playerTwoScore){
 	return gameRoomModel.update({"room":room},{ $set: {
 		piecesOne: piecesOne,
 		piecesTwo: piecesTwo,
-		playerOneTurn: playerOneTurn
+		playerOneTurn: playerOneTurn,
+		playerOneScore: playerOneScore,
+		playerTwoScore: playerTwoScore
 	}})
 }
 
