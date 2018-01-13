@@ -27,7 +27,7 @@ export default class Expelled extends React.Component {
     }
     render(){
         return(
-            <Card className="red lighten-5">
+            <Card className="orange lighten-1">
                 <h2 className='card-content red-text'>You Have Been Expelled!</h2>
                 <div className='card-content red-text'><p>Redirecting to home page in {this.state.redirectTime} seconds.</p></div>
             </Card>
