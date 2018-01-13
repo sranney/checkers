@@ -10,6 +10,7 @@ import GamePlayPage from "./components/GamePage";
 import NoVacancy from "./components/NoVacancy";
 import Expelled from "./components/Expelled";
 import Leave from "./components/Leave";
+import Rankings from "./components/Rankings";
 
 //firebase for authentication
 import {auth} from "./firebase";
@@ -143,7 +144,15 @@ class App extends Component {
               {...routerProps}
             />
           )}
-        />        
+        />
+        <Route 
+          exact path="/Rankings"
+          render = {(routerProps) => (
+            <Rankings
+              {...routerProps}
+            />
+          )}
+        />               
         <Route component = {NotFound} />
       </Switch>
     </div>

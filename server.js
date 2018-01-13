@@ -164,6 +164,22 @@ app.post("/gameSettings", (req, res)=>{
 	console.log(gameRoom);
 });
 
+
+app.get("/getRankings",(req,res)=>{
+	userModel.find().sort({wins:-1}).then(data=>{
+		const rankings = data.map(player=>{
+			const {username,wins} = player;
+			return [
+				username,
+				wins
+			]
+		})
+		rankings.unshift(['Player','Wins']);
+		
+		res.json(rankings);
+	});
+})
+
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '/index.html'))
 });
@@ -171,8 +187,6 @@ app.get('*', (req, res) => {
 if(process.env.NODE_ENV==='production'){
 	
 }
-
-
 
 
 //array that will be used to store users that are online and be sent to the browser
