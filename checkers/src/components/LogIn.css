@@ -108,6 +108,8 @@ Footer.copyrights {
     opacity: 0 !important;
 }
 
-.input-field:focus~label {
-    color: #91c74c !important;
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
 }

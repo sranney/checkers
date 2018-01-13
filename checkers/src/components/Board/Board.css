@@ -1,12 +1,11 @@
 .fullGameBoard {
     position: absolute;
-    top: 175px;
-    left: 33%;
+    top: 250px;
+    left: 40%;
 }
 
 .board {
     float: left;
-    /*position: relative;*/
     height: 386px;
     width: 386px;
     border-style: solid;
@@ -99,5 +98,48 @@ div.piece.playerTwo.king {
 }
 
 h1 {
+    color: white;
+}
+
+div.deadPiece {
+    float: left;
+    position: relative;
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    z-index: 10;
+    margin: 6px;
+    margin-top: 5px;
+}
+
+div.deadPiece.deadPlayerOne {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#da2708+0,b92215+0,ea3014+54,bd1c07+65,bc210c+92 */
+    background: rgb(218, 39, 8);
+    /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, rgba(218, 39, 8, 1) 0%, rgba(185, 34, 21, 1) 0%, rgba(234, 48, 20, 1) 54%, rgba(189, 28, 7, 1) 65%, rgba(188, 33, 12, 1) 92%);
+    /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(218, 39, 8, 1) 0%, rgba(185, 34, 21, 1) 0%, rgba(234, 48, 20, 1) 54%, rgba(189, 28, 7, 1) 65%, rgba(188, 33, 12, 1) 92%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center, rgba(218, 39, 8, 1) 0%, rgba(185, 34, 21, 1) 0%, rgba(234, 48, 20, 1) 54%, rgba(189, 28, 7, 1) 65%, rgba(188, 33, 12, 1) 92%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#da2708', endColorstr='#bc210c', GradientType=1);
+    /* IE6-9 fallback on horizontal gradient */
+}
+
+div.deadPiece.deadPlayerTwo {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#83bd07+0,7ea212+0,93cb11+54,77a406+65,78a30b+92 */
+    background: rgb(131, 189, 7);
+    /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, rgba(131, 189, 7, 1) 0%, rgba(126, 162, 18, 1) 0%, rgba(147, 203, 17, 1) 54%, rgba(119, 164, 6, 1) 65%, rgba(120, 163, 11, 1) 92%);
+    /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(131, 189, 7, 1) 0%, rgba(126, 162, 18, 1) 0%, rgba(147, 203, 17, 1) 54%, rgba(119, 164, 6, 1) 65%, rgba(120, 163, 11, 1) 92%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center, rgba(131, 189, 7, 1) 0%, rgba(126, 162, 18, 1) 0%, rgba(147, 203, 17, 1) 54%, rgba(119, 164, 6, 1) 65%, rgba(120, 163, 11, 1) 92%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#83bd07', endColorstr='#78a30b', GradientType=1);
+    /* IE6-9 fallback on horizontal gradient */
+}
+
+h3 {
     color: white;
 }
