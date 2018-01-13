@@ -189,8 +189,6 @@ if(process.env.NODE_ENV==='production'){
 }
 
 
-
-
 //array that will be used to store users that are online and be sent to the browser
 let onlineUsersArr = [];
 let trueDisconnect = true;
