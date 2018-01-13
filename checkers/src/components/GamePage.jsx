@@ -297,10 +297,10 @@ class GamePlayPage extends Component {
                     room={room}
                     currUser={currUsername}
                     gamePlayers={gamePlayers}
+                    renderCanvas={this.renderCanvas}
                 />
 
 
-                <button onClick={this.renderCanvas}>Canvas</button>
                 <Footer id = "LogInFooter" copyrights="&copy 2017 SuperGroup"
                     className="light-green"
                     links={

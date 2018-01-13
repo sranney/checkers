@@ -164,6 +164,22 @@ app.post("/gameSettings", (req, res)=>{
 	console.log(gameRoom);
 });
 
+
+app.get("/getRankings",(req,res)=>{
+	userModel.find().sort({wins:-1}).then(data=>{
+		const rankings = data.map(player=>{
+			const {username,wins} = player;
+			return [
+				username,
+				wins
+			]
+		})
+		rankings.unshift(['Player','Wins']);
+		
+		res.json(rankings);
+	});
+})
+
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '/index.html'))
 });
@@ -171,8 +187,6 @@ app.get('*', (req, res) => {
 if(process.env.NODE_ENV==='production'){
 	
 }
-
-
 
 
 //array that will be used to store users that are online and be sent to the browser
@@ -336,7 +350,7 @@ const SocketManager = (socket) => {
 	})
 
 	socket.on("set board", board => {
-		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn)
+		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn, board.playerOneScore, board.playerTwoScore)
 			.then(data => {
 				io.emit("board settings", data);
 			});
@@ -345,13 +359,29 @@ const SocketManager = (socket) => {
 	socket.on("reset game",room=>{
 		console.log("game reset");
 		console.log(room)
-		updateGameBoard(room,piecesOne,piecesTwo,true)
+		updateGameBoard(room,piecesOne,piecesTwo,true,0, 0)
 			.then(data=>{
 				getGamePieces(room).then(data=>{
 					io.emit(`start board - ${room}`, data[0]);
 				})
 			})
 	})
+
+	socket.on("game won",player=>{
+		console.log("game won");
+		const {userName, room} = player;
+		console.log(room)
+		userModel.update({"username": userName}, { $inc: {wins:1} }).then(dataPass => {
+			updateGameBoard(room,piecesOne,piecesTwo,true,0, 0)
+				.then(data=>{
+					getGamePieces(room).then(data=>{
+						io.emit(`start board - ${room}`, data[0]);
+					})
+				})
+			})
+
+	})
+
 
 }
 
@@ -380,11 +410,13 @@ function getGamePieces(roomOwner){
 	return gameRoomModel.find({room:roomOwner});
 }
 
-function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn){
+function updateGameBoard(room,piecesOne,piecesTwo,playerOneTurn, playerOneScore, playerTwoScore){
 	return gameRoomModel.update({"room":room},{ $set: {
 		piecesOne: piecesOne,
 		piecesTwo: piecesTwo,
-		playerOneTurn: playerOneTurn
+		playerOneTurn: playerOneTurn,
+		playerOneScore: playerOneScore,
+		playerTwoScore: playerTwoScore
 	}})
 }
 

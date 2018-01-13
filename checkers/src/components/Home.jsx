@@ -50,6 +50,10 @@ class Home extends React.Component {
         this.props.history.push(personalizedgameid);
     }
 
+    rankings = () => {
+        this.props.history.push("/Rankings");
+    }
+
     render(){
         // const divStyle = {
         //     background: 'none' 
@@ -98,7 +102,7 @@ this.props.user?
                             name: this.props.user.displayName,
                             email: this.props.user.email
 		                    }}/>
-                                <Button  
+                        <Button  
                             id="logOutBtn" 
                             className = "btn orange lighten-1 waves-effect waves-light z-depth-2" 
                             onClick={this.props.logOut}>
@@ -111,6 +115,13 @@ this.props.user?
                             >
                             Game Page
                         </Button>
+                        <Button 
+                            id="rankingsBtn" 
+                            className = "btn orange lighten-1 waves-effect waves-light z-depth-2 center" 
+                            onClick={this.rankings}
+                            >
+                            Rankings
+                        </Button>                        
 
                     <SideNavItem divider />
                     <SideNavItem subheader>Online Users</SideNavItem>
