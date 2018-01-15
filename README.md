@@ -9,4 +9,6 @@ Fun ending game confetti overlay!
 
 Google Charts shows our top ranking players.
 
-Come check out the game at https://checkyourcheckers.herokuapp.com
+Firebase Authentication with Google oAuth lets you quickly set up and login to your account.
+
+Come check out the game and play with us at https://checkyourcheckers.herokuapp.com!
