@@ -7,8 +7,6 @@ var path = require("path");
 //database stuff
 var mongoose = require("mongoose");
 
-//nodemailer
-var nodemailer = require("nodemailer");
 // using SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
 const sgMail = require('@sendgrid/mail');
@@ -52,7 +50,7 @@ mongoose.connect(connection, {
   useMongoClient: true
 });
 
-//route - posting new users - from log in page
+//for when the user has been authenticated, pushing data to the database if there isn't a user with the email already in the database
 app.post("/login",function(req,res){
 	const UserData = {
 		uid: req.body.uid,
@@ -66,6 +64,7 @@ app.post("/login",function(req,res){
 		data.length===0?
 			userModel.create(UserData).then(res => {
 				const room = UserData.username;
+				//also creates a game room for each user
 				gameRoomModel.create({
 					room: room,
 					squares: squares,
@@ -78,6 +77,7 @@ app.post("/login",function(req,res){
 	});
 })
 
+//for sending emails with sendgrid
 app.post("/sendInvite",function(req,res){
 	const msgSubj = `${req.body.fromName} has invited you to play checkers`;
 	const msgBody = `${req.body.msgBody}. Click this link to register and play with them: ${req.body.gameLink}`;
@@ -92,7 +92,7 @@ app.post("/sendInvite",function(req,res){
 	sgMail.send(msg).catch(err=>console.log(err));
 })
 
-//getting chats for specific chat room
+//getting chats for specific game room
 app.get("/chat_:roomNum",function(req,res){
 	const roomNum = req.params.roomNum;
 	console.log(roomNum);
@@ -102,6 +102,7 @@ app.get("/chat_:roomNum",function(req,res){
 	})
 })
 
+//endpoint for checking whether a game room already has an opponent, if it does, it sends information back to the client which in turn is interpreted and turns the person trying to access the game back to the home page
 app.post("/checkVacancy",function(req,res){
 	const room = req.body.room;
 	const username = req.body.username;
@@ -130,6 +131,8 @@ app.post("/checkVacancy",function(req,res){
 	})
 })
 
+//endpoint for getting the correct chats for the current user's home page - all private chats between user and other online users
+//called when the home chat modal is loaded
 app.post("/chats-home",(req,res)=>{
 	const {currUsername,otherUsername} = req.body;
 	chatModel.find({room:`${currUsername}-home`}).then(data=>{
@@ -140,6 +143,7 @@ app.post("/chats-home",(req,res)=>{
 	});
 })
 
+//endpoint for getting the chats for a particular room (location) between the room owner and the specific opponent that is currently in the room
 app.post("/chats-game",(req,res)=>{
 	let {location,currUsername,otherUsername} = req.body;
 	location = location.replace("/GamePage/","");
@@ -164,7 +168,7 @@ app.post("/gameSettings", (req, res)=>{
 	console.log(gameRoom);
 });
 
-
+//for the ranking chart which will show how many wins each customer has 
 app.get("/getRankings",(req,res)=>{
 	userModel.find().sort({wins:-1}).then(data=>{
 		const rankings = data.map(player=>{
@@ -180,14 +184,10 @@ app.get("/getRankings",(req,res)=>{
 	});
 })
 
+//for making site persistent, along with React Router's Hash Router prevents site from breaking when the user refreshes page or tries to navigate to a specific route by using the address bar
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '/index.html'))
 });
-
-if(process.env.NODE_ENV==='production'){
-	
-}
-
 
 //array that will be used to store users that are online and be sent to the browser
 let onlineUsersArr = [];
@@ -202,12 +202,15 @@ const SocketManager = (socket) => {
 
 		const username=email.substr(0,email.indexOf("@"))//compute username
 		const userObjForOnlineUsers = {socket,email,username};//collect data to be used with this socket and that will be put in the array
+		//get the current user data in the online user array
 		onlineUsers_currUser = onlineUsersArr.filter(user=>{//
 			return user.email === email;
 		})
+		//if current user is not in the array, push socket, email and username to the array
 		if(onlineUsers_currUser.length === 0 ){ 
 			onlineUsersArr.push(userObjForOnlineUsers)
 		} else {
+			//otherwise change the socket to be the current socket
 			onlineUsersArr = onlineUsersArr.map(user=>{
 				if(user.email === email){
 					user.socket = socket;
@@ -216,13 +219,16 @@ const SocketManager = (socket) => {
 			})
 			trueDisconnect = false;
 		}
-
+		//aggregate the username and emails of all online users and pass it back to client through socket.io emit
 		const onlineUsers_userdata = onlineUsersArr.map(user=>{
 			return {username:user.username,email:user.email};
 		})
 		io.emit( "user connected" , onlineUsers_userdata );	
 	})
 
+	//when a user closes the site or refreshes their page, this causes the socket to disconnect
+	//the callback function will remove the user with the socket from the online users array and return the 
+	//array after the socket has been removed back to the browser so that they no longer are in the list of online users
 	socket.on("disconnect", () => {
 		console.log(`disconnected socket: ${socket.id}`);
 		onlineUsersArr = onlineUsersArr.filter(user=>{
@@ -236,6 +242,8 @@ const SocketManager = (socket) => {
 	})
 
 	//when a user clicks the logout button, an emit is sent from client to server
+	//this will trigger the following callback function which removes the user with the email from the online users array
+	//the the username and email are aggregated and sent back to the client for all of the up-to-date currently logged in users
 	socket.on("logout",user => {
 		const email = user.email;
 		onlineUsersArr = onlineUsersArr.filter(user=>{
@@ -249,10 +257,12 @@ const SocketManager = (socket) => {
 
 	})
 
-
 	//listening for when a chat has been sent from the client to the server
+	//the data that is sent in the msgObj from the client to the server is the sender of the message, the message and the intended recipient of the message
 	socket.on("chat-home",(msgObj)=>{
 		const {sender,message,to} = msgObj;
+		//the data is saved twice in the chat collection, one for the sender and one for the recipient, so that it is persistent on both ends
+		//this is also specifically a listener which is only for messages sent from home page and should only show up on home page
 		const firstDataObj = {
 			sender,
 			room:`${sender}-home`,
@@ -268,15 +278,21 @@ const SocketManager = (socket) => {
 		//sending the data that has been sent from the client to mongodb
 		chatModel.create(firstDataObj).then(data=>{
 			chatModel.create(secondDataObj).then(data2=>{
+				//and now sending it to be picked back up by the socket listeners registered in the client
+				//pairings of listeners of sender_to and to_sender
 				io.emit(`chat_${sender}_${to}`,msgObj);
 				io.emit(`chat_${to}_${sender}`,msgObj);					
 			})
 		})
 	})
 
+	//listener for chats emitted from game room
 	socket.on("chat-game",(msgObj)=>{
+		//msgObj contains game room info (location), sender of msg, recipient of msg and message
+		//recipient is important for when the page is loaded with different opponents - only sending messages that are specific to conversations with an individual opponent
 		const {location,sender,to,message} = msgObj;
 		console.log(location);
+		//object to be pushed to the database for the information pertaining to the message
 		const dataObj = {
 			sender,
 			room:`${location}-game`,
@@ -286,25 +302,33 @@ const SocketManager = (socket) => {
 		//sending the data that has been sent from the client to mongodb
 		chatModel.create(dataObj).then(data=>{
 			console.log(`chat_${location}`);
+			//ultimately emitting back to the client the message so that both room owner and opponent can receive the message
 			io.emit(`chat_game_${location}`,msgObj);				
 		})
 	})
 
+	//home typing event socket event listener
+	//for picking up from client that a user is typing a message and sending back to the two people that are designated to the home chat modal that this is occurring
 	socket.on("typing-home",typingObj=>{
 		console.log("typing sent to server");
 		const {currUsername,otherUsername,isTyping} = typingObj;
+		//only sending the typing message to the person being typed to, so can formulate the id to send this event to simply as otherusername (the other person in teh conversation) _ person typing
 		const socketListenerID = `${otherUsername}_${currUsername}`;		
 		const typingRes = isTyping ? currUsername : false;//false or the message created will say currUsername is typing
 		console.log(socketListenerID);
+		//send back to the client whether someone is typing (in which case send back the username of the person typing) or not (in which case send false)
 		io.emit(`typing_home_${socketListenerID}`,typingRes);
 	})
 
+	//socket listener for game chat, works very similarly to the way that the home chat typing event is handled
 	socket.on("typing-game",typingObj=>{
 		console.log("typing sent to server");
 		const {currUsername,location,isTyping} = typingObj;
 		const socketListenerID = location.replace("/GamePage/","");		
+		//socket listener is based on the room name
 		const typingRes = isTyping ? currUsername : false;//false or the message created will say currUsername is typing
 		console.log("where to send: "+socketListenerID);
+		//send back to the room name
 		io.emit(`typing_game_${socketListenerID}`,typingRes);
 	})
 
@@ -336,19 +360,24 @@ const SocketManager = (socket) => {
 		})
 	})
 
+	//picking up event for when an opponent leaves a room
 	socket.on("leave game",gameObj=>{
 		const {room,opponent} = gameObj;
+		//updating database to remove the opponent from the game room, so that another user can join the room
 		gameRoomModel.update({"room":room},{$set:{"opponent":""}}).then(data => {
+			//emitting to the room that the user has left the room, so that the room owner can be notified, and so that the opponent will be redirected to home page
 			io.emit(`leave_${room}`,{opponent});
 		})
 	})
 
+	//for getting start of game
 	socket.on("get start", room=>{
 		getGamePieces(room).then(data=>{
 			io.emit(`start board - ${room}`, data[0]);
 		})
 	})
 
+	//for setting board pieces after moves have been made
 	socket.on("set board", board => {
 		updateGameBoard(board.gameRoom, board.piecesOne, board.piecesTwo, board.playerOneTurn, board.playerOneScore, board.playerTwoScore)
 			.then(data => {
@@ -356,6 +385,7 @@ const SocketManager = (socket) => {
 			});
 	})
 
+	//for resetting game when game has been completed or opponent has been expelled or has left a game
 	socket.on("reset game",room=>{
 		console.log("game reset");
 		console.log(room)
@@ -367,6 +397,7 @@ const SocketManager = (socket) => {
 			})
 	})
 
+	//for when a game has won
 	socket.on("game won",player=>{
 		console.log("game won");
 		const {userName, room} = player;
