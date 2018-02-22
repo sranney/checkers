@@ -4,6 +4,7 @@ import React from "react";
 //materialize components
 import {Button, Modal, SideNavItem, SideNav, Card, CardTitle, Input, Footer, Toast} from 'react-materialize';
 
+//simple component that will display when the user has been expelled from the room
 export default class Expelled extends React.Component {
     constructor(){
         super();
@@ -11,6 +12,8 @@ export default class Expelled extends React.Component {
             redirectTime:5
         }
     }
+    //sets up a timer that will display countdown from 5 seconds
+    //allows user to understand why they aren't in the room anymore
     componentDidMount(){
         let IntervalID = setInterval(()=>{
             if(this.state.redirectTime <= 0){ 

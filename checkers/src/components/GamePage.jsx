@@ -12,15 +12,18 @@ import Board from './Board';
 import ChatModal from "./Chat-Game";
 import Canvas from "./Canvas";
 
+//canvas related variables
 let pieces = [];
 let numPieces = 25;
 let lastUpdateTime = Date.now();
 
+//canvas confetti piece color generator 
 function randColor(){
     let colors = ["#f00","#0f0","#00f","#ff0","#f0f","#0ff"];
     return colors[Math.floor(Math.random()*colors.length)]
 }
 
+//canvas component update function that will update animation of canvas
 function update(){
 
     if(pieces.length>0){
@@ -51,7 +54,7 @@ function update(){
         totalPieces = 0;
     }
 }
-
+//for drawing placement of confetti pieces and updating animation for confetti pieces
 function draw(){
     context.clearRect(0,0,canvas.width,canvas.height);
     pieces.forEach(function(p){
@@ -69,7 +72,7 @@ function draw(){
     requestAnimationFrame(draw);
 
 }
-
+//for each piece of confetti, 
 function Piece(x,y){
     this.x = x;
     this.y = y;
@@ -83,9 +86,11 @@ function Piece(x,y){
 
 var dropConf = false,canvas,context,totalPieces=0;
 
+//gameplaypage component
 class GamePlayPage extends Component {
     constructor(props){
         super(props);
+        //binding context of "this" to be the component
         this.home = this.home.bind(this);
         this.renderPage = this.renderPage.bind(this);
         this.gameConnect = this.gameConnect.bind(this);
@@ -95,22 +100,31 @@ class GamePlayPage extends Component {
         this.renderLeaveButton = this.renderLeaveButton.bind(this);
         this.leaveGame = this.leaveGame.bind(this);
         this.renderCanvas = this.renderCanvas.bind(this);
+
+        //gamePlayers object array will be two players, the first is the game room owner, and the second is the opponent that has entered the game
         this.state = {
             gamePlayers:[]
         }
     }
 
+    //the following two component lifecycle functions are being used because of the async nature of the firebase call onAuthStateChanged - this.props.user will only be set after the user has visited the site and the auth state has been picked up - because this component will render before that happens, need to check a couple times for this.props.user to be set
+    //that's why two component lifecycle events are being checked here
+    //for sending to server that a game room has been loaded
+    //this will only run if the game has been navigated to from within the app
     componentWillMount(){
         this.CheckAndSetGame();
     }
-
+    //for sending to server that a game room has been loaded
+    //for when the game room has been navigated to from outside the game, the game room component will receive props from the application onload
     componentWillReceiveProps(){
         this.CheckAndSetGame();
     }
 
+    //for handling analysis of whether a user 
     componentDidMount () {
+        //getting the room id 
         const room = this.props.match.params.id;
-        console.log(room);
+        //application socket has been passed into component to deal with the 
         const socket = this.props.socket;
         //message returned from server in response to emitted message in function gameConnect
         //sets the gameplayers on the client
@@ -118,7 +132,8 @@ class GamePlayPage extends Component {
         socket.on(`leave_${room}`,gameObj=>{
             this.gameConnect();
         })
-        if(this.props.user){
+        if(this.props.user){//makes sure that the user visiting the site is logged in
+            //
             this.gameConnect();
             const {user} = this.props;
             const username = user.email.substr(0,user.email.indexOf("@"));
@@ -174,7 +189,7 @@ class GamePlayPage extends Component {
         }        
     }
 
-    home = () => {
+    home = () => {//for user navigation back to home page from button push
         this.props.history.push("/home");
     }
 
@@ -186,27 +201,29 @@ class GamePlayPage extends Component {
         socket.emit("game connect",{room,username});
     }
 
-    renderExpelButton = () => {
+    renderExpelButton = () => {//placing an expel button on the game page
         return (
-            <Button id="expelBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-2" onClick={this.expelOpponent}>Expel Opponent</Button>             
+            <Button id="expelBtn" className = "btn orange lighten-1 waves-effect waves-light z-depth-2" onClick={this.expelOpponent}>Expel Opponent</Button>//onclick will run the expel opponent function
         )
     }
 
-    expelOpponent = () => {
-        const room = this.props.match.params.id;
+    expelOpponent = () => {//kick user out of room
+        const room = this.props.match.params.id;//get from url, the id of the room
         const {socket} = this.props;
-        const {gamePlayers} = this.state;
+        const {gamePlayers} = this.state;//get gameplayers from state -> the second player in the array will be the opponent
 
-        if( gamePlayers[1] !== "no opponent yet" && gamePlayers[1] !== undefined ){
+        if( gamePlayers[1] !== "no opponent yet" && gamePlayers[1] !== undefined ){//first make sure that there is an opponent to expel
             const opponent = gamePlayers[1];
-            const roomInfo = {
+            const roomInfo = {//form object to pass as the object sent in the client to server emit
                 room,opponent
             }
-            socket.emit("expel from game",roomInfo);
-            this.gameConnect();
+            socket.emit("expel from game",roomInfo);//emit event "expel from game" to server with the roomInfo obj
+            //this triggers a function that will remove the opponent from the mongodb game
+            this.gameConnect();//picks up current status of mongodb game room player list
         }
         console.log(room);
-        socket.emit("reset game",room);
+        socket.emit("reset game",room);//will reset board game. the emit that happens as a respone back to the server is picked up specifically by the board component
+        //so this essentially acts as a call from this component through the server to the board component to reset pieces
     }
 
     renderLeaveButton = () => {
@@ -215,20 +232,20 @@ class GamePlayPage extends Component {
         )
     }
 
-    leaveGame = () => {
+    leaveGame = () => {//for when a user has pushed the leave game button. will emit reset game which will be picked up by board component and reset the game
         const room = this.props.match.params.id;
         const {socket,user} = this.props;
         const {gamePlayers} = this.state;
         const roomInfo = {
             room,user
         }
-        socket.emit("leave game",roomInfo);
+        socket.emit("leave game",roomInfo);//for mongodb action to remove player from game
         socket.emit("reset game",room);
         this.gameConnect();
         this.props.history.push("/Leave");
     }
 
-    renderCanvas = ()=>{
+    renderCanvas = ()=>{//for creating canvas overlay - this is called from board component when a win in the game has been determined
         dropConf = !dropConf;
         var canvasElmt = document.createElement("canvas");
         canvasElmt.setAttribute("id","confetti");
@@ -253,7 +270,7 @@ class GamePlayPage extends Component {
         return (
             <main style={{position:"relative"}}>
                 <div id="nav" className="right"> 
-
+                    {/* side navigation component */}
                     <SideNav
                     trigger={ <Button id="gameChatBtn"  className="btn orange lighten-1 waves-effect waves-light z-depth-5">Menu</Button>}
                     options={{ closeOnClick: true }}>
@@ -291,7 +308,7 @@ class GamePlayPage extends Component {
                     }
                 </SideNav>
                 </div>
-
+                {/* board component */}
                 <Board
                     socket={socket}
                     room={room}
@@ -300,7 +317,7 @@ class GamePlayPage extends Component {
                     renderCanvas={this.renderCanvas}
                 />
 
-
+                {/* footer component */}
                 <Footer id = "LogInFooter" copyrights="&copy 2017 SuperGroup"
                     className="light-green"
                     links={
@@ -321,13 +338,13 @@ class GamePlayPage extends Component {
     render() {
         return ( 
             this.props.user? 
-                this.renderPage()
+                this.renderPage()//if user is set already then render game page
             :
-                setTimeout(()=>{
+                setTimeout(()=>{//async nature of setting user in app state means that there needs to be a slight delay for this to run correctly. if this is still falsy after a 1 second delay return the user to the home page
                     this.props.user?
                         this.renderPage()
                     :
-                        <Redirect to="/home"/>
+                        <Redirect to="/home"/>//return to home page
                 },1000)
             );  
 
@@ -342,4 +359,4 @@ class GamePlayPage extends Component {
 }
 
 
-export default GamePlayPage
+export default GamePlayPage;

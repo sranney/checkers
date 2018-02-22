@@ -1,5 +1,5 @@
 import React from "react";
-
+//simple object constructor to generate pieces of confetti to fall and rotate at different speeds
 function Piece(x,y){
     this.x = x;
     this.y = y;
@@ -9,11 +9,14 @@ function Piece(x,y){
     this.rotationSpeed = this.rotation * 0.005;
     this.color = randColor();
 }
+//random colored pieces generator
 const randColor = ()=>{
     let colors = ["#f00","#0f0","#00f","#ff0","#f0f","#0ff"];
     return colors[Math.floor(Math.random()*colors.length)]
 }
+//react component confetti, operates in much different way than normal component
 export default class Canvas extends React.Component{
+    //set attributes for the confetti array to drop 
     constructor(){
         super();
         this.pieces = [];
@@ -57,6 +60,7 @@ export default class Canvas extends React.Component{
             this.totalPieces = 0;
         }
     }
+
 
     draw = ()=>{
         this.context.clearRect(0,0,this.canvas.width,this.canvas.height);

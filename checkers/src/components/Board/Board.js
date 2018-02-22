@@ -1339,7 +1339,7 @@ class Board extends Component {
 		if(arr1.length>11){
 			console.log("GAME IS WON!");
 			socket.emit("game won", {room, userName});
-			renderCanvas();
+			renderCanvas();//function passed down from game room that when ran will create confetti overlay canvas for game win animation
 		}
 	}			
 

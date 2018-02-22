@@ -26,7 +26,7 @@ class Home extends React.Component {
         const {socket} = this.props;
     }
 
-    sendInvite = (e) =>{
+    sendInvite = (e) =>{//for sending email invites - sends data that will be used by sendgrid to create email
         e.preventDefault();
         axios.post("/sendInvite",{
             fromEmail : this.props.user.email,
@@ -45,12 +45,13 @@ class Home extends React.Component {
 
     gameNav = () => {
         const email=this.props.user.email;
+        //if email is set, user is logged in site - this will create a link to be used as the gameroom for current user
         const personalizedgameid = email? `/GamePage/${email.substr(0,email.indexOf("@"))}` : null;
         
-        this.props.history.push(personalizedgameid);
+        this.props.history.push(personalizedgameid);//invokes function that navigates user to game room
     }
 
-    rankings = () => {
+    rankings = () => {//when user pushes rankings button on sidenav, navigate user to /rankings
         this.props.history.push("/Rankings");
     }
 
