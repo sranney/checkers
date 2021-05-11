@@ -9,7 +9,7 @@
     "jquery": "^3.5.0",
     "materialize-css": "^0.100.2",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.2.1",
     "react-google-charts": "^1.5.5",
     "react-materialize": "^1.1.1",
     "react-modal": "^3.1.8",
