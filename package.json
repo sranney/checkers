@@ -21,7 +21,7 @@
         "mongoose": "^5.0.0-rc0",
         "nodemailer": "^6.4.16",
         "react-router-dom": "^4.2.2",
-        "socket.io": "^2.0.4"
+        "socket.io": "^2.5.0"
     },
     "devDependencies": {
         "concurrently": "^3.5.1",
